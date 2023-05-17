@@ -10,7 +10,7 @@ def send_message(prompts):
     }
     
     # Read developer-focused context from file
-    with open("langchain.txt") as f:
+    with open("streamlitdocumentation.txt") as f:
         context = f.read() 
     
     # Update conversation prefix 
@@ -42,7 +42,7 @@ if "prompts" not in st.session_state:
     st.session_state.prompts = [
         {
            "role": "Human", 
-           "content": "I'm building an application in Python using langchain and want your advice." 
+           "content": "I'm building an application in Python using Streamlit and want your advice." 
         }
     ] 
 
