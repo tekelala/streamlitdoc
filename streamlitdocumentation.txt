@@ -1,0 +1,981 @@
+Streamlit Trust and Security - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit Community Cloud/Trust and SecurityStreamlit Trust and SecurityStreamlit is a framework that turns Python scripts into interactive apps, giving data scientists the ability to quickly create data and model-based apps for the entire company.A simple Streamlit app is:import streamlit as st
+number = st.slider("Pick a number: ", min_value=1, max_value=10)
+st.text("Your number is " + str(number))
+When you streamlit run my_app.py, you start a web server that runs the interactive application on your local computer at http://localhost:8501. This is great for local development. When you want to share with your colleagues, Streamlit Community Cloud enables you to deploy and run these applications in the cloud. Streamlit Community Cloud handles all the details of scaling, reliability, and security as well as providing you an interface for easily managing your deployed apps.This document is an overview of how we provide best-in-industry security for you. We'll cover all the important areas in the lifecycle of your data:Product Security: how we ensure only you can create and view apps that access your dataNetwork and Application Security: how we ensure your data is protected when it is in our cloudOngoing Operations: how we stay good stewards of security best practicesProduct SecuritySSOAll access and sign-ins to Streamlit are conducted via an SSO provider: GitHub and GSuite. We do not store customer passwords.Credential StorageWe encrypt sensitive customer data (e.g. secrets, authentication tokens) at-rest with AES256 as described in Google's documentation.Permissions and Role-Based Access ControlOur permission levels inherit from the permissions you have assigned in GitHub. Users with write access to a GitHub repository for a given app will be able to make changes in the Streamlit administrative console.Only users with admin access to a repository are able to deploy and delete apps.Network and Application SecurityData HostingOur physical infrastructure is hosted and managed within Google Cloud Platform (GCP) using their secure data centers. Streamlit leverages many of the platform's built-in security, privacy, and redundancy features. GCP continually monitors its data centers for risk and undergoes assessments to ensure compliance with industry standards. GCP's data centers have numerous accreditations, including ISO-27001, SOC 1 and SOC 2.Virtual Private CloudAll of our servers are within a virtual private cloud (VPC) with firewalls and network access control lists (ACLs) to allow external access to a select few API endpoints; all other internal services are only accessible within the VPC.EncryptionAll Streamlit apps are served entirely over HTTPS. All data sent to or from Streamlit over the public internet is encrypted in transit using 256-bit encryption. Our API and application endpoints are TLS only (v1.2). We use only strong cipher suites and HTTP Strict Transport Security (HSTS) to ensure browsers interact with Streamlit apps over HTTPS. We also encrypt data at rest using AES-256.Permissions and AuthenticationAccess to customer data is limited to authorized employees who require it for their job. We run a zero-trust corporate network so there are no corporate resources or additional privileges gained from being on Streamlit's internal network. We utilize single sign-on, 2-factor authentication (2FA), and enforce strong password policies to ensure access to all cloud-related services are protected.Incident ResponseWe have an internal protocol for handling security events which includes escalation procedures, rapid mitigation, and documented post-mortems. We notify customers promptly and publicize security advisories at https://streamlit.io/advisories.Penetration TestingStreamlit uses third-party security tools to scan for vulnerabilities on a regular basis. Our security partners conduct periodic, intensive penetration tests on the Streamlit platform. Our product development team immediately responds to any identified issues or potential vulnerabilities to ensure the quality and security of Streamlit applications.Security and Compliance ProgramsPeopleBackground ChecksAll Streamlit employees go through a thorough background check before hiring.TrainingWe take a least-privilege approach to the access and handling of data. While we retain a minimal amount of customer data and limit internal access on a need-to-know basis, all employees are required to review related security policies and are trained on proper data handling to ensure they uphold our strict commitment to the privacy and security of your data.ConfidentialityAll employees sign a confidentiality agreement before they start at Streamlit.Vulnerability ControlVulnerability ManagementWe keep our systems up-to-date with the latest security patches and continuously monitor for new vulnerabilities through compliance and security mailing lists. This includes automatic scanning of our code repositories for vulnerable dependencies.push_pinNoteIf you have further questions about Community Cloud and our security approach, please reach out to us on the Community forum.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Get startedNext: Release notesHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Get started - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get startedGet startedThis Get Started guide explains how Streamlit works, how to install Streamlit on your preferred
+operating system, and how to create your first Streamlit app!downloadingInstallation helps you set up your virtual environment and walks you through installing Streamlit on Windows, macOS, and Linux. Regardless of which package management tool and OS you're using, we recommend running the commands on this page in a virtual environment.descriptionMain concepts introduces you to Streamlit's data model and development flow. You'll learn what makes Streamlit the most powerful way to build data apps, including the ability to display and style data, draw charts and maps, add interactive widgets, customize app layouts, cache computation, and define themes.auto_awesomeCreate an app using Streamlit's core features to fetch and cache data, draw charts, plot information on a map, and use interactive widgets, like a slider, to filter results.auto_storiesMultipage apps teaches you how to add pages to your app, including how to define pages, structure and run multipage apps, and navigate between pages. Once you understand the basics, create your first multipage app based on the familiar streamlit hello command!30 Days of Streamlit 🎈30 Days of Streamlit 🎈 is a free, self-paced 30 day challenge that teaches you how to build and deploy data apps with Streamlit. Complete the daily challenges, share your solutions with us on Twitter and LinkedIn, and stop by the forum with any questions!Start the challengeWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit libraryNext: InstallationHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Advanced features - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresremoveCommand-line optionsConfigurationThemingCachingAdd statefulness to appsDataframesWidget semanticsPre-release featuresWorking with timezonesStatic file servingHTTPS supportSecrets managementComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Advanced featuresAdvanced featuresThis section gives you background on how different parts of Streamlit work.Command-line optionsWhen you install Streamlit, a command-line (CLI) tool gets installed as well. The purpose of this tool is to run Streamlit apps, change Streamlit configuration options, and help you diagnose and fix issues.What is the command-line interface (CLI)?How to run Streamlit apps from the CLI?View Streamlit version from the CLI?View documentation from the CLIClear cache from the CLIStreamlit configurationStreamlit provides four different ways to set configuration options. Learn how to use each of them to change the behavior of Streamlit.How to set configuration options?Opt out of telemetry collectionView all configuration optionsThemingThis section provides examples of how Streamlit page elements are affected by the various theme config options.primaryColorbackgroundcolorsecondarybackgroundcolortextcolorfontbaseCachingThe Streamlit cache allows your app to stay performant even when loading data from the web, manipulating large datasets, or performing expensive computations. To cache a function in Streamlit, you need to decorate it with one of two decorators: st.cache_data and st.cache_resource.Minimal exampleBasic usagest.cache_datast.cache_resourceDeciding which caching decorator to useAdvanced usageExcluding input parametersControlling cache size and durationCustomizing the spinnerUsing Streamlit commands in cached functionsMutation and concurrency issuesMigrating from st.cacheAdd statefulness to appsSession State is a way to share variables between reruns, for each user session. In addition to the ability to store and persist state, Streamlit also exposes the ability to manipulate state using Callbacks.What is Session State?How to initialize Session State items?How to read and update Session State items?How to use callbacks in Session State?How to use args and kwargs in callbacks?How to use callbacks in forms?How is Session State related to Widget State?Caveats and limitationsPre-release featuresAt Streamlit, we like to move quick while keeping things stable. In our latest effort to move even faster without sacrificing stability, we're offering our bold and fearless users two ways to try out Streamlit's bleeding-edge features.Experimental featuresNightly releasesSecrets managementThis section provides examples of how to use secrets management to store and retrieve sensitive information in your Streamlit app.Develop locally and set up secretsUse secrets in your appError handlingUse secrets on Streamlit Community CloudWorking with timezonesWorking with timezones can be tricky. This section provides a high-level description of how to handle timezones in Streamlit to avoid unexpected behavior.OverviewHow Streamlit handles timezonesdatetime instance without a timezone (naive)datetime instance with a timezoneAdvanced notes on widget behaviorWidgets are magical and often work how you want. But they can have surprising behavior in some situations. This section provides is a high-level, abstract description of widget behavior, including some common edge-cases.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: API referenceNext: Command-line optionsHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Get started - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedremoveDeploy an appaddShare your appaddManage your appTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit Community Cloud/Get startedGet startedWelcome to Streamlit Community Cloud! First things first, before you get started with Streamlit Community Cloud, you need to have a Streamlit app to deploy. If you haven't built one yet, read our Get started docs or start with an Example app. Either way, it only takes a few minutes to create your first app.How Streamlit Community Cloud worksStreamlit Community Cloud is a workspace for your team to deploy, manage, and collaborate on your Streamlit apps. You connect your Streamlit Community Cloud account directly to your GitHub repository (public or private) and then Streamlit Community Cloud launches the apps directly from the code you've stored on GitHub. Most apps will launch in only a few minutes, and any time you update the code on GitHub, your app will automatically update for you. This creates a fast iteration cycle for your deployed apps, so that developers and viewers of apps can rapidly prototype, explore, and update apps.Under the hood Streamlit Community Cloud handles all of the containerization, authentication, scaling, security and everything else so that all you need to worry about is creating the app. Maintaining Streamlit apps is easy. Containers get the latest security patches, are actively monitored for container health. We are also building the capability to observe and monitor apps.Getting startedGetting your workspace set up with Streamlit Community Cloud only takes a few minutes.Sign up for Streamlit Community CloudLog in to your accountConnect your Streamlit Community Cloud account to GitHubExplore your Streamlit Community Cloud workspaceInvite other developers on your teamSign up for Streamlit Community CloudStreamlit's Community Cloud allows you to deploy, manage, and share your apps with the world, directly from Streamlit — all for free. Sign up on the Community Cloud homepage.Once you've signed up, login to share.streamlit.io and follow the steps below.Log in to share.streamlit.ioYou can login to Streamlit Community Cloud with:GoogleGitHubEmail based sign-in link: These are single-use links that are valid for up to 15 minutes.If you're a developer, we recommend starting with GitHub the first time you login. You can later setup your account to login using Google.If you're sharing your app, your app's users can use any of the above methods to login.Sign in with GoogleVisit share.streamlit.io and click the "Continue with Google" button.Step 1: Click the 'Continue with Google' buttonOn the next page, choose an account to sign in with and enter your Google account credentials.Step 2: Enter your Google account credentialsOnce you have signed in to Google, you will be taken to your Streamlit Community Cloud workspace!🎈Your Streamlit Community Cloud workspaceSign in with GitHubVisit share.streamlit.io and click the "Continue with GitHub" button.Step 1: Click the 'Continue with GitHub' buttonOn the next page, enter your GitHub credentials to sign in.Step 2: Enter your GitHub account credentialsOnce you have signed in to GitHub, you will be taken to your Streamlit Community Cloud workspace!🎈Your Streamlit Community Cloud workspaceSign in with EmailIf you don't have SSO, you can sign in with your email address! Visit share.streamlit.io, enter the email address you used to sign up for Streamlit Community Cloud, and click the "Continue with email" button.Step 1: Enter your email address and click 'Continue with email'Once you do so, you will see a confirmation message (like the one below) asking you to check your email.Step 2: Check your inbox for an email from StreamlitCheck your inbox for an email from Streamlit, with the subject "Sign in to Streamlit Community Cloud". Click the link in the email to sign in to Streamlit. Note that this link will expire in 15 minutes and can only be used once.Step 3: Click the link in the email to sign in to StreamlitOnce you click the link in your email, you will be taken to your Streamlit Community Cloud workspace!🎈Your Streamlit Community Cloud workspaceConnect your GitHub accountNext you need to authorize Streamlit to connect to your GitHub account. This lets your Streamlit Community Cloud workspace launch apps directly from the app files you store in your repos, as well as let the system check for updates to those app files so that your apps can automatically update. You will see two different authorization screens to give this access. Click "authorize" on both. Questions about GitHub permissions? Read more here!priority_highImportantYou must have admin permissions to your repo in order to deploy apps. If you don't have admin access, talk to your IT team or manager about helping you set up your Streamlit Community Cloud account or reach out to us on the Community forum.Authorization screen 1Authorization screen 2push_pinNoteOnce a user is added to a repository on GitHub, it will take at most 15 minutes before they can deploy the app on Cloud. If a user is removed from a repository on GitHub, it will take at most 15 minutes before their permissions to manage the app from that repository are revoked.Explore your Streamlit Community Cloud workspaceCongrats! You are now logged in and ready to go. If you are joining someone else's workspace you may already see apps populated in your workspace. If not, then you need to deploy an app! Check out our next section on how to deploy an app. And if you need an app to deploy check out our example apps that include apps for machine learning, data science, and business use cases.You may also find that you already have multiple Streamlit Community Cloud workspaces. Streamlit Community Cloud automatically groups your apps according to the corresponding GitHub repository's owner. In the upper right corner you can see the workspaces you have access to. If your team has already launched apps, then you will see those apps in your workspace. Read more about workspaces here.Invite other developers to your workspaceInviting other developers is simple, just invite them to your GitHub repository so that you can code on apps together, and then have them log in to share.streamlit.io. If you are working as a team, you likely are already in the same repos, so skip step 1 and go straight to having them log into share.streamlit.ioStreamlit Community Cloud inherits developer permissions from GitHub, so when your teammates log in, they will automatically view the workspaces you share. From there you can all deploy, manage, and share apps together.And remember, whenever anyone on the team updates the code on GitHub, the app will also automatically update for you!Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit Community CloudNext: Deploy an appHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Deployment Issues - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge base/Deployment issuesDeployment-related questions and errorsHow do I deploy Streamlit on a domain so it appears to run on a regular port (i.e. port 80)?How can I deploy multiple Streamlit apps on different subdomains?How do I deploy Streamlit on Heroku, AWS, Google Cloud, etc...?Invoking a Python subprocess in a deployed Streamlit appDoes Streamlit support the WSGI Protocol? (aka Can I deploy Streamlit with gunicorn?)Argh. This app has gone over its resource limits.App is not loading when running remotelyAuthentication without SSOI don't have GitHub or GSuite. How do I sign in to Streamlit Community Cloud?How do I share apps with viewers outside my organization?Upgrade the Streamlit version of your app on Streamlit Community CloudOrganizing your apps with workspaces on Streamlit Community CloudHow do I increase the upload limit of st.file_uploader on Streamlit Community Cloud?How do I customize my app's subdomain?How to update account admin settings on Streamlit Community Cloud?Unable to edit or delete apps in Streamlit Community Cloud after modifying GitHub usernameHuh. This is isn't supposed to happen message after trying to log inHuh. This isn't supposed to happen. No valid SSO connection for domainView-only access to app after changing GitHub username or repository nameLogin attempt to Streamlit Community Cloud fails with error 403How to submit a support case for Streamlit Community CloudWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Installing dependenciesNext: Authentication without SSOHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Get started - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get startedGet startedThis Get Started guide explains how Streamlit works, how to install Streamlit on your preferred
+operating system, and how to create your first Streamlit app!downloadingInstallation helps you set up your virtual environment and walks you through installing Streamlit on Windows, macOS, and Linux. Regardless of which package management tool and OS you're using, we recommend running the commands on this page in a virtual environment.descriptionMain concepts introduces you to Streamlit's data model and development flow. You'll learn what makes Streamlit the most powerful way to build data apps, including the ability to display and style data, draw charts and maps, add interactive widgets, customize app layouts, cache computation, and define themes.auto_awesomeCreate an app using Streamlit's core features to fetch and cache data, draw charts, plot information on a map, and use interactive widgets, like a slider, to filter results.auto_storiesMultipage apps teaches you how to add pages to your app, including how to define pages, structure and run multipage apps, and navigate between pages. Once you understand the basics, create your first multipage app based on the familiar streamlit hello command!30 Days of Streamlit 🎈30 Days of Streamlit 🎈 is a free, self-paced 30 day challenge that teaches you how to build and deploy data apps with Streamlit. Complete the daily challenges, share your solutions with us on Twitter and LinkedIn, and stop by the forum with any questions!Start the challengeWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit libraryNext: InstallationHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Using Streamlit - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge base/Using StreamlitUsing StreamlitHere are some frequently asked questions about using Streamlit. If you feel something important is missing that everyone needs to know, please open an issue or submit a pull request and we'll be happy to review it!Sanity checksBatch elements and input widgets with st.formHow do I run my Streamlit script?How can I make Streamlit watch for changes in other modules I'm importing in my app?What browsers does Streamlit support?What is the path of Streamlit’s config.toml file?Where does st.file_uploader store uploaded files and when do they get deleted?How do you retrieve the filename of a file uploaded with st.file_uploader?How to remove "· Streamlit" from the app title?How to download a file in Streamlit?How to download a Pandas DataFrame as a CSV?How can I make st.pydeck_chart use custom Mapbox styles?How to insert elements out of order?How to animate elements?Append data to a table or chartHide row indices when displaying a dataframeHow to record a screencast?How do I upgrade to the latest version of Streamlit?How do I hide the hamburger menu from my app?Widget updating for every second input when using session stateHow do I create an anchor link?How do I enable camera access?Why does Streamlit restrict nested st.columns?How to host static files in Streamlit?What is serializable session state?Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: TutorialsNext: How to animate elements?HomeContact UsCommunityCopyright © 2023, Streamlit Inc.Streamlit Components - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge base/Streamlit ComponentsStreamlit ComponentsBelow are some selected questions we've received about Streamlit Components. If you don't find your question here, take a look on the Streamlit community forum via the Components tag.How do Streamlit Components differ from functionality provided in the base Streamlit package?What types of things aren't possible with Streamlit Components?How do I add a Component to the sidebar?My Component seems to be blinking/stuttering...how do I fix that?Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Using StreamlitNext: How do I add a Component to the sidebar?HomeContact UsCommunityCopyright © 2023, Streamlit Inc.Components - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsremoveComponents APICreate a ComponentPublish a ComponentComponent galleryopen_in_newRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/ComponentsCustom ComponentsComponents are third-party Python modules that extend what's possible with Streamlit.How to use a ComponentComponents are super easy to use:Start by finding the Component you'd like to use. Two great resources for this are:The Component galleryThis thread,
+by Fanilo A. from our forums.Install the Component using your favorite Python package manager. This step and all following
+steps are described in your component's instructions.For example, to use the fantastic AgGrid
+Component, you first install it with:pip install streamlit-aggrid
+In your Python code, import the Component as described in its instructions. For AgGrid, this step
+is:from st_aggrid import AgGrid
+...now you're ready to use it! For AgGrid, that's:AgGrid(my_dataframe)
+Making your own ComponentIf you're interested in making your own component, check out the following resources:Create a ComponentPublish a ComponentComponents APIblog post for when we launched Components!Alternatively, if you prefer to learn using videos, our engineer Tim Conkling has put together some
+amazing tutorials:Video tutorial, part 1Video tutorial, part 2Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Advanced featuresNext: Components APIHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Cheat sheet - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Cheat sheetCheat SheetThis is a summary of the docs, as of Streamlit v1.22.0.Install & Importstreamlit run first_app.py
+
+# Import convention
+>>> import streamlit as st
+Command linestreamlit --help
+streamlit run your_script.py
+streamlit hello
+streamlit config show
+streamlit cache clear
+streamlit docs
+streamlit --version
+Pre-release featurespip uninstall streamlit
+pip install streamlit-nightly --upgrade
+Learn more about experimental featuresMagic commands# Magic commands implicitly
+# call st.write().
+'_This_ is some **Markdown***'
+my_variable
+'dataframe:', my_data_frame
+
+Display textst.text('Fixed width text')
+st.markdown('_Markdown_') # see *
+st.latex(r''' e^{i\pi} + 1 = 0 ''')
+st.write('Most objects') # df, err, func, keras!
+st.write(['st', 'is <', 3]) # see *
+st.title('My title')
+st.header('My header')
+st.subheader('My sub')
+st.code('for i in range(8): foo()')
+* optional kwarg unsafe_allow_html = True
+Display datast.dataframe(my_dataframe)
+st.table(data.iloc[0:10])
+st.json({'foo':'bar','fu':'ba'})
+st.metric('My metric', 42, 2)
+
+Display mediast.image('./header.png')
+st.audio(data)
+st.video(data)
+Add widgets to sidebar# Just add it after st.sidebar:
+>>> a = st.sidebar.radio('Select one:', [1, 2])
+
+# Or use "with" notation:
+>>> with st.sidebar:
+>>>   st.radio('Select one:', [1, 2])
+Columns# Two equal columns:
+>>> col1, col2 = st.columns(2)
+>>> col1.write("This is column 1")
+>>> col2.write("This is column 2")
+
+# Three different columns:
+>>> col1, col2, col3 = st.columns([3, 1, 1])
+# col1 is larger.
+
+# You can also use "with" notation:
+>>> with col1:
+>>>   st.radio('Select one:', [1, 2])
+Tabs# Insert containers separated into tabs:
+>>> tab1, tab2 = st.tabs(["Tab 1", "Tab2"])
+>>> tab1.write("this is tab 1")
+>>> tab2.write("this is tab 2")
+
+# You can also use "with" notation:
+>>> with tab1:
+>>>   st.radio('Select one:', [1, 2])
+Control flow# Stop execution immediately:
+st.stop()
+# Rerun script immediately:
+st.experimental_rerun()
+
+# Group multiple widgets:
+>>> with st.form(key='my_form'):
+>>>   username = st.text_input('Username')
+>>>   password = st.text_input('Password')
+>>>   st.form_submit_button('Login')
+Display interactive widgetsst.button('Click me')
+st.experimental_data_editor('Edit data', data)
+st.checkbox('I agree')
+st.radio('Pick one', ['cats', 'dogs'])
+st.selectbox('Pick one', ['cats', 'dogs'])
+st.multiselect('Buy', ['milk', 'apples', 'potatoes'])
+st.slider('Pick a number', 0, 100)
+st.select_slider('Pick a size', ['S', 'M', 'L'])
+st.text_input('First name')
+st.number_input('Pick a number', 0, 10)
+st.text_area('Text to translate')
+st.date_input('Your birthday')
+st.time_input('Meeting time')
+st.file_uploader('Upload a CSV')
+st.download_button('Download file', data)
+st.camera_input("Take a picture")
+st.color_picker('Pick a color')
+
+# Use widgets' returned values in variables:
+>>> for i in range(int(st.number_input('Num:'))):
+>>>   foo()
+>>> if st.sidebar.selectbox('I:',['f']) == 'f':
+>>>   b()
+>>> my_slider_val = st.slider('Quinn Mallory', 1, 88)
+>>> st.write(slider_val)
+
+# Disable widgets to remove interactivity:
+>>> st.slider('Pick a number', 0, 100, disabled=True)
+Mutate data# Add rows to a dataframe after
+# showing it.
+>>> element = st.dataframe(df1)
+>>> element.add_rows(df2)
+
+# Add rows to a chart after
+# showing it.
+>>> element = st.line_chart(df1)
+>>> element.add_rows(df2)
+Display code>>> with st.echo():
+>>>   st.write('Code will be executed and printed')
+Placeholders, help, and options# Replace any single element.
+>>> element = st.empty()
+>>> element.line_chart(...)
+>>> element.text_input(...)  # Replaces previous.
+
+# Insert out of order.
+>>> elements = st.container()
+>>> elements.line_chart(...)
+>>> st.write("Hello")
+>>> elements.text_input(...)  # Appears above "Hello".
+
+st.help(pandas.DataFrame)
+st.get_option(key)
+st.set_option(key, value)
+st.set_page_config(layout='wide')
+st.experimental_show(objects)
+st.experimental_get_query_params()
+st.experimental_set_query_params(**params)
+Connect to data sourcesst.experimental_connection('pets_db', type='sql')
+conn = st.experimental_connection('sql')
+conn = st.experimental_connection('snowpark')
+
+>>> class MyConnection(ExperimentalBaseConnection[myconn.MyConnection]):
+>>>    def _connect(self, **kwargs) -> MyConnection:
+>>>        return myconn.connect(**self._secrets, **kwargs)
+>>>    def query(self, query):
+>>>       return self._instance.query(query)
+Optimize performanceCache data objects# E.g. Dataframe computation, storing downloaded data, etc.
+>>> @st.cache_data
+... def foo(bar):
+...   # Do something expensive and return data
+...   return data
+# Executes foo
+>>> d1 = foo(ref1)
+# Does not execute foo
+# Returns cached item by value, d1 == d2
+>>> d2 = foo(ref1)
+# Different arg, so function foo executes
+>>> d3 = foo(ref2)
+# Clear all cached entries for this function
+>>> foo.clear()
+# Clear values from *all* in-memory or on-disk cached functions
+>>> st.cache_data.clear()
+Cache global resources# E.g. TensorFlow session, database connection, etc.
+>>> @st.cache_resource
+... def foo(bar):
+...   # Create and return a non-data object
+...   return session
+# Executes foo
+>>> s1 = foo(ref1)
+# Does not execute foo
+# Returns cached item by reference, s1 == s2
+>>> s2 = foo(ref1)
+# Different arg, so function foo executes
+>>> s3 = foo(ref2)
+# Clear all cached entries for this function
+>>> foo.clear()
+# Clear all global resources from cache
+>>> st.cache_resource.clear()
+Deprecated caching>>> @st.cache
+... def foo(bar):
+...   # Do something expensive in here...
+...   return data
+>>> # Executes foo
+>>> d1 = foo(ref1)
+>>> # Does not execute foo
+>>> # Returns cached item by reference, d1 == d2
+>>> d2 = foo(ref1)
+>>> # Different arg, so function foo executes
+>>> d3 = foo(ref2)
+Display progress and status>>> with st.spinner(text='In progress'):
+>>>   time.sleep(5)
+>>>   st.success('Done')
+
+st.progress(progress_variable_1_to_100)
+st.balloons()
+st.snow()
+st.error('Error message')
+st.warning('Warning message')
+st.info('Info message')
+st.success('Success message')
+st.exception(e)
+Personalize apps for users# Show different content based on the user's email address.
+>>> if st.user.email == 'jane@email.com':
+>>>    display_jane_content()
+>>> elif st.user.email == 'adam@foocorp.io':
+>>>    display_adam_content()
+>>> else:
+>>>    st.write("Please contact us to get access!")
+Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: ChangelogNext: Streamlit Community CloudHomeContact UsCommunityCopyright © 2023, Streamlit Inc.API Reference - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceremoveWrite and magicaddText elementsaddData display elementsaddChart elementsaddInput widgetsaddMedia elementsaddLayouts and containersaddStatus elementsaddControl flowaddUtilitiesaddMutate chartsState managementPerformanceaddPersonalizationaddConnections and databasesaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/API referenceAPI referenceStreamlit makes it easy for you to visualize, mutate, and share data. The API
+reference is organized by activity type, like displaying data or optimizing
+performance. Each section includes methods associated with the activity type,
+including examples.Browse our API below and click to learn more about any of our available commands! 🎈Display almost anythingst.writeWrite arguments to the app.st.write("Hello **world**!")
+st.write(my_data_frame)
+st.write(my_mpl_figure)
+MagicAny time Streamlit sees either a variable or literal value on its own line, it automatically writes that to your app using st.write"Hello **world**!"
+my_data_frame
+my_mpl_figure
+Text elementsMarkdownDisplay string formatted as Markdown.st.markdown("Hello **world**!")
+TitleDisplay text in title formatting.st.title("The app title")
+HeaderDisplay text in header formatting.st.header("This is a header")
+SubheaderDisplay text in subheader formatting.st.subheader("This is a subheader")
+CaptionDisplay text in small font.st.caption("This is written small caption text")
+Code blockDisplay a code block with optional syntax highlighting.st.code("a = 1234")
+Preformatted textWrite fixed-width and preformatted text.st.text("Hello world")
+LaTeXDisplay mathematical expressions formatted as LaTeX.st.latex("\int a x^2 \,dx")
+DividerDisplay a horizontal rule.st.divider()
+Data display elementsDataframesDisplay a dataframe as an interactive table.st.dataframe(my_data_frame)
+Static tablesDisplay a static table.st.table(my_data_frame)
+MetricsDisplay a metric in big bold font, with an optional indicator of how the metric changed.st.metric("My metric", 42, 2)
+Dicts and JSONDisplay object or string as a pretty-printed JSON string.st.json(my_dict)
+Chart elementsSimple line chartsDisplay a line chart.st.line_chart(my_data_frame)
+Simple area chartsDisplay an area chart.st.area_chart(my_data_frame)
+Simple bar chartsDisplay a bar chart.st.bar_chart(my_data_frame)
+Scatterplots on mapsDisplay a map with points on it.st.map(my_data_frame)
+MatplotlibDisplay a matplotlib.pyplot figure.st.pyplot(my_mpl_figure)
+AltairDisplay a chart using the Altair library.st.altair_chart(my_altair_chart)
+Vega-LiteDisplay a chart using the Vega-Lite library.st.vega_lite_chart(my_vega_lite_chart)
+PlotlyDisplay an interactive Plotly chart.st.plotly_chart(my_plotly_chart)
+BokehDisplay an interactive Bokeh chart.st.bokeh_chart(my_bokeh_chart)
+PyDeckDisplay a chart using the PyDeck library.st.pydeck_chart(my_pydeck_chart)
+GraphVizDisplay a graph using the dagre-d3 library.st.graphviz_chart(my_graphviz_spec)
+Input widgetsButtonDisplay a button widget.clicked = st.button("Click me")
+Data editorDisplay a data editor widget.edited = st.experimental_data_editor(df, num_rows="dynamic")
+Download buttonDisplay a download button widget.st.download_button("Download file", file)
+CheckboxDisplay a checkbox widget.selected = st.checkbox("I agree")
+RadioDisplay a radio button widget.choice = st.radio("Pick one", ["cats", "dogs"])
+SelectboxDisplay a select widget.choice = st.selectbox("Pick one", ["cats", "dogs"])
+MultiselectDisplay a multiselect widget. The multiselect widget starts as empty.choices = st.multiselect("Buy", ["milk", "apples", "potatoes"])
+SliderDisplay a slider widget.number = st.slider("Pick a number", 0, 100)
+Select-sliderDisplay a slider widget to select items from a list.size = st.select_slider("Pick a size", ["S", "M", "L"])
+Text inputDisplay a single-line text input widget.name = st.text_input("First name")
+Number inputDisplay a numeric input widget.choice = st.number_input("Pick a number", 0, 10)
+Text-areaDisplay a multi-line text input widget.text = st.text_area("Text to translate")
+Date inputDisplay a date input widget.date = st.date_input("Your birthday")
+Time inputDisplay a time input widget.time = st.time_input("Meeting time")
+File UploaderDisplay a file uploader widget.data = st.file_uploader("Upload a CSV")
+Camera inputDisplay a widget that allows users to upload images directly from a camera.image = st.camera_input("Take a picture")
+Color pickerDisplay a color picker widget.color = st.color_picker("Pick a color")
+Media elementsImageDisplay an image or list of images.st.image(numpy_array)
+st.image(image_bytes)
+st.image(file)
+st.image("https://example.com/myimage.jpg")
+AudioDisplay an audio player.st.audio(numpy_array)
+st.audio(audio_bytes)
+st.audio(file)
+st.audio("https://example.com/myaudio.mp3", format="audio/mp3")
+VideoDisplay a video player.st.video(numpy_array)
+st.video(video_bytes)
+st.video(file)
+st.video("https://example.com/myvideo.mp4", format="video/mp4")
+Layouts and containersSidebarDisplay items in a sidebar.st.sidebar.write("This lives in the sidebar")
+st.sidebar.button("Click me!")
+ColumnsInsert containers laid out as side-by-side columns.col1, col2 = st.columns(2)
+col1.write("this is column 1")
+col2.write("this is column 2")
+TabsInsert containers separated into tabs.tab1, tab2 = st.tabs(["Tab 1", "Tab2"])
+tab1.write("this is tab 1")
+tab2.write("this is tab 2")
+ExpanderInsert a multi-element container that can be expanded/collapsed.with st.expander("Open to see more"):
+  st.write("This is more content")
+ContainerInsert a multi-element container.c = st.container()
+st.write("This will show last")
+c.write("This will show first")
+c.write("This will show second")
+EmptyInsert a single-element container.c = st.empty()
+st.write("This will show last")
+c.write("This will be replaced")
+c.write("This will show first")
+Display progress and statusProgress barDisplay a progress bar.for i in range(101):
+  st.progress(i)
+  do_something_slow()
+SpinnerTemporarily displays a message while executing a block of code.with st.spinner("Please wait..."):
+  do_something_slow()
+BalloonsDisplay celebratory balloons!do_something()
+
+# Celebrate when all done!
+st.balloons()
+SnowflakesDisplay celebratory snowflakes!do_something()
+
+# Celebrate when all done!
+st.snow()
+Error boxDisplay error message.st.error("We encountered an error")
+Warning boxDisplay warning message.st.warning("Unable to fetch image. Skipping...")
+Info boxDisplay an informational message.st.info("Dataset is updated every day at midnight.")
+Success boxDisplay a success message.st.success("Match found!")
+Exception outputDisplay an exception.e = RuntimeError("This is an exception of type RuntimeError")
+st.exception(e)
+Control flowFormsCreate a form that batches elements together with a “Submit” button.with st.form(key='my_form'):
+    username = st.text_input("Username")
+    password = st.text_input("Password")
+    st.form_submit_button("Login")
+Stop executionStops execution immediately.st.stop()
+Rerun scriptRerun the script immediately.st.experimental_rerun()
+UtilitiesSet page title, favicon, and moreConfigures the default settings of the page.st.set_page_config(
+  title="My app",
+  favicon=":shark:",
+)
+EchoDisplay some code on the app, then execute it. Useful for tutorials.with st.echo():
+  st.write('This code will be printed')
+Get helpDisplay object’s doc string, nicely formatted.st.help(st.write)
+st.help(pd.DataFrame)
+st.experimental_showWrite arguments and argument names to your app for debugging purposes.df = pd.DataFrame({
+  'first column': [1, 2, 3, 4],
+  'second column': [10, 20, 30, 40],
+ })
+st.experimental_show(df)
+Get query parametersReturn the query parameters that are currently showing in the browser's URL bar.st.experimental_get_query_params()
+Set query parametersSet the query parameters that are shown in the browser's URL bar.st.experimental_set_query_params(
+  show_map=True,
+  selected=["asia"]
+)
+Mutate chartsAdd rowsAppend a dataframe to the bottom of the current one in certain elements, for optimized data updates.element = st.line_chart(df)
+element.add_rows(df_with_extra_rows)
+State managementSession stateSession state is a way to share variables between reruns, for each user session.st.session_state['key'] = value
+PerformanceCache dataFunction decorator to cache functions that return data (e.g. dataframe transforms, database queries, ML inference).@st.cache_data
+def long_function(param1, param2):
+  # Perform expensive computation here or
+  # fetch data from the web here
+  return data
+Cache resourceFunction decorator to cache functions that return global resources (e.g. database connections, ML models).@st.cache_resource
+def init_model():
+  # Return a global resource here
+  return pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english"
+  )
+Clear cached dataClear all in-memory and on-disk data caches.@st.cache_data
+def long_function(param1, param2):
+  # Perform expensive computation here or
+  # fetch data from the web here
+  return data
+
+if st.checkbox("Clear All"):
+  # Clear values from *all* cache_data functions
+  st.cache_data.clear()
+Clear cached resourcesClear all st.cache_resource caches.@st.cache_resource
+def init_model():
+  # Return a global resource here
+  return pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english"
+  )
+
+if st.checkbox("Clear All"):
+  # Clear values from *all* cache_resource functions
+  st.cache_data.clear()
+Connections and databasesSetup your connectionCreate a connectionConnect to a data source or APIconn = st.experimental_connection('pets_db', type='sql')
+pet_owners = conn.query('select * from pet_owners')
+st.dataframe(pet_owners)
+Built-in connectionsSQLConnectionA connection to a SQL database using SQLAlchemy.conn = st.experimental_connection('sql')
+SnowparkConnectionA connection to Snowflake Snowpark.conn = st.experimental_connection('snowpark')
+Third-party connectionsConnection base classBuild your own connection with ExperimentalBaseConnection.class MyConnection(ExperimentalBaseConnection[myconn.MyConnection]):
+    def _connect(self, **kwargs) -> MyConnection:
+        return myconn.connect(**self._secrets, **kwargs)
+    def query(self, query):
+        return self._instance.query(query)
+PersonalizationUser infost.experimental_user returns information about the logged-in user of private apps on Streamlit Community Cloud.if st.experimental_user.email == "foo@corp.com":
+  st.write("Welcome back, ", st.experimental_user.email)
+else:
+  st.write("You are not authorized to view this page.")
+Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Get startedNext: Write and magicHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Streamlit Community Cloud - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit Community CloudWelcome to Streamlit Community CloudStreamlit's Community Cloud is an open and free platform for the community to deploy, discover, and share Streamlit apps and code with each other. If you're just getting started and have not yet built your first Streamlit app, check out the main Get started page first. When you're ready to share it, create a Community Cloud account and you can launch your app in just a few minutes! Deploy, manage, and share your apps with the world, directly from Streamlit — all for free.arrow_forwardGet startedLearn how to set up your account to start deploying apps.flight_takeoffDeploy an appA step by step guide on how to get your app deployed.electrical_servicesConnect data sourcesLearn how to securely connect your app to data sources.shareShare your appShare your app publicly or privately with select viewers and developers.manage_accountsManage your appAccess logs, reboot, or favorite an app, and other tips and tricks.push_pinNoteInterested in our security model? Check out our Trust and Security page.Questions? Reach out to us on the Community forum!Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit libraryNext: Get startedHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Multipage apps - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsremoveCreate a multipage appAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get started/Multipage appsMultipage appsAs apps grow large, it becomes useful to organize them into multiple pages. This makes the app easier to manage as a developer and easier to navigate as a user. Streamlit provides a frictionless way to create multipage apps. Pages are automatically shown in a nice navigation widget inside the app sidebar, and clicking on a page will navigate to the page without reloading the frontend — making app browsing incredibly fast!We created a "single-page app" to explore a public Uber dataset for pickups and drop-offs in New York City on the previous page. In this guide, let’s learn how to create multipage apps. Once we have a solid foundation on what it takes to create multipage apps, let’s build one for ourselves in the next section!Structuring multipage appsLet's understand what it takes to create multipage apps — including how to define pages, structure and run multipage apps, and navigate between pages in the user interface. Once you've understood the basics, you can jump right into the next section to convert the familiar streamlit hello command into a multipage app!Run a multipage appRunning a multipage app is identical to running a single-page app. The command to run a multipage app is:streamlit run [entrypoint file]
+The "entrypoint file" is the first page the app will show to the user. Once you have added pages to your app, the entrypoint file appears as the top-most page in the sidebar. You can think of the entrypoint file as your app's "main page". For example, say your entrypoint file is Home.py. Then, to run your app, you can run streamlit run Home.py. This will start your app and execute the code in Home.py.Adding pagesOnce you've created your entrypoint file, you can add pages by creating .py files in a pages/ directory relative to your entrypoint file. For example, if your entrypoint file is Home.py, then you can create a pages/About.py file to define the "About" page. Here's a valid directory structure for a multipage app:Home.py # This is the file you run with "streamlit run"
+└─── pages/
+  └─── About.py # This is a page
+  └─── 2_Page_two.py # This is another page
+  └─── 3_😎_three.py # So is this
+starTipWhen adding emojis to filenames, it’s best practice to include a numbered-prefix to make autocompletion in your terminal easier. Terminal-autocomplete can get confused by unicode (which is how emojis are represented).Pages are defined as .py files in a pages/ directory. The filenames of pages are transformed to page names in the sidebar based on the the rules in the section below. For example, the About.py file will appear as "About" in the sidebar, 2_Page_two.py appears as "Page two", and 3_😎_three.py appears as “😎 three”:Only .py files in the pages/ directory will be loaded as pages. Streamlit ignores all other files in the pages/ directory and subdirectories.How pages are labeled and sorted in the UIPage labels in the sidebar UI are generated from filenames. They may differ from the page title set in st.set_page_config. Let's learn what constitutes a valid filename for a page, how pages are displayed in the sidebar, and how pages are sorted.Valid filenames for pagesFilenames are composed of four different parts:A number — if the file is prefixed with a number.A separator — could be _, -, space, or any combination thereof.A label — which is everything up to, but not including, .py.The extension — which is always .py.How pages are displayed in the sidebarWhat is displayed in the sidebar is the label part of the filename:If there's no label, Streamlit uses the number as the label.In the UI, Streamlit beautifies the label by replacing _ with space.How pages are sorted in the sidebarSorting considers numbers in the filename to be actual numbers (integers):Files that have a number appear before files without a number.Files are sorted based on the number (if any), followed by the title (if any).When files are sorted, Streamlit treats the number as an actual number rather than a string. So 03 is the same as 3.This table shows examples of filenames and their corresponding labels, sorted by the order in which they appear in the sidebar.Examples:FilenameRendered label1 - first page.pyfirst page12 monkeys.pymonkeys123.py123123_hello_dear_world.pyhello dear world_12 monkeys.py12 monkeysstarTipEmojis can be used to make your page names more fun! For example, a file named 🏠_Home.py will create a page titled "🏠 Home" in the sidebar.Navigating between pagesPages are automatically shown in a nice navigation UI inside the app's sidebar. When you click on a page in the sidebar UI, Streamlit navigates to that page without reloading the entire frontend — making app browsing incredibly fast!You can also navigate between pages using URLs. Pages have their own URLs, defined by the file's label. When multiple files have the same label, Streamlit picks the first one (based on the ordering described above). Users can view a specific page by visiting the page's URL.If a user tries to access a URL for a page that does not exist, they will see a modal like the one below, saying the user has requested a page that was not found in the app’s pages/ directory.NotesPages support magic commands.Pages support run-on-save. Additionally, when you save a page, this causes a rerun for users currently viewing that exact page.Adding or deleting a page causes the UI to update immediately.Updating pages in the sidebar does not rerun the script.st.set_page_config works at the page level. When you set a title or favicon using st.set_page_config, this applies to the current page only.Pages share the same Python modules globally:# page1.py
+import foo
+foo.hello = 123
+
+# page2.py
+import foo
+st.write(foo.hello)  # If page1 already executed, this should write 123
+Pages share the same st.session_state:# page1.py
+import streamlit as st
+if "shared" not in st.session_state:
+   st.session_state["shared"] = True
+
+# page2.py
+import streamlit as st
+st.write(st.session_state["shared"])
+# If page1 already executed, this should write True
+You now have a solid understanding of multipage apps. You've learned how to structure apps, define pages, and navigate between pages in the user interface. It's time to create your first multipage app! 🥳Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Create an appNext: Create a multipage appHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Installation - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get started/InstallationInstall StreamlitTable of contentsPrerequisitesInstall Streamlit on WindowsInstall Streamlit on macOS/LinuxPrerequisitesBefore you get started, you're going to need a few things:Your favorite IDE or text editorPython 3.7 - Python 3.11PIPSet up your virtual environmentRegardless of which package management tool you're using, we recommend running
+the commands on this page in a virtual environment. This ensures that the dependencies
+pulled in for Streamlit don't impact any other Python projects
+you're working on.Below are a few tools you can use for environment management:pipenvpoetryvenvvirtualenvcondaInstall Streamlit on WindowsStreamlit's officially-supported environment manager on Windows is Anaconda Navigator.Install AnacondaIf you don't have Anaconda install yet, follow the steps provided on the Anaconda installation page.Create a new environment with StreamlitNext you'll need to set up your environment.Follow the steps provided by Anaconda to set up and manage your environment using the Anaconda Navigator.Select the "▶" icon next to your new environment. Then select "Open terminal":In the terminal that appears, type:pip install streamlit
+Test that the installation worked:streamlit hello
+Streamlit's Hello app should appear in a new tab in your web browser!Use your new environmentIn Anaconda Navigator, open a terminal in your environment (see step 2 above).In the terminal that appears, use Streamlit as usual:streamlit run myfile.py
+Install Streamlit on macOS/LinuxStreamlit's officially-supported environment manager for macOS and Linux is Pipenv. See instructions on how to install and use it below.Install PipenvInstall pip. More details about installing pip can be found in pip's documentation.On a macOS:python -m ensurepip --upgrade
+On Ubuntu with Python 3:sudo apt-get install python3-pip
+For other Linux distributions, see How to install PIP for Python.Install pipenv.pip3 install pipenv
+Install Xcode command line tools on macOSOn macOS, you'll need to install Xcode command line tools. They are required to compile some of Streamlit's Python dependencies during installation. To install Xcode command line tools, run:xcode-select --install
+Create a new environment with StreamlitNavigate to your project folder:cd myproject
+Create a new Pipenv environment in that folder and activate that environment:pipenv shell
+When you run the command above, a file called Pipfile will appear in myprojects/. This file is where your Pipenv environment and its dependencies are declared.Install Streamlit in your environment:pip install streamlit
+Or if you want to create an easily-reproducible environment, replace pip with pipenv every time you install something:pipenv install streamlit
+Test that the installation worked:streamlit hello
+Streamlit's Hello app should appear in a new tab in your web browser!Use your new environmentAny time you want to use the new environment, you first need to go to your project folder (where the Pipenv file lives) and run:pipenv shell
+Now you can use Python and Streamlit as usual:streamlit run myfile.py
+To stop the Streamlit server, press ctrl-C.When you're done using this environment, just type exit or press ctrl-D to return to your normal shell.Now that you've installed Streamlit, take a few minutes to read through Main concepts to understand Streamlit's data flow model.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Get startedNext: Main conceptsHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Create an app - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get started/Create an appCreate an appIf you've made it this far, chances are you've
+installed Streamlit and
+run through the basics in our Main concepts guide. If
+not, now is a good time to take a look.The easiest way to learn how to use Streamlit is to try things out yourself. As you read through this guide, test each method. As long as your app is running, every time you add a new element to your script and save, Streamlit's UI will ask if you'd like to rerun the app and view the changes. This allows you to work in a fast interactive loop: you write some code, save it, review the output, write some more, and so on, until you're happy with the results. The goal is to use Streamlit to create an interactive app for your data or model and along the way to use Streamlit to review, debug, perfect, and share your code.In this guide, you're going to use Streamlit's core features to
+create an interactive app; exploring a public Uber dataset for pickups and
+drop-offs in New York City. When you're finished, you'll know how to fetch
+and cache data, draw charts, plot information on a map, and use interactive
+widgets, like a slider, to filter results.starTipIf you'd like to skip ahead and see everything at once, the complete script
+is available below.Create your first appStreamlit is more than just a way to make data apps, it’s also a community of creators that share their apps and ideas and help each other make their work better. Please come join us on the community forum. We love to hear your questions, ideas, and help you work through your bugs — stop by today!The first step is to create a new Python script. Let's call it
+uber_pickups.py.Open uber_pickups.py in your favorite IDE or text editor, then add these
+lines:import streamlit as st
+import pandas as pd
+import numpy as np
+Every good app has a title, so let's add one:st.title('Uber pickups in NYC')
+Now it's time to run Streamlit from the command line:streamlit run uber_pickups.py
+Running a Streamlit app is no different than any other Python script. Whenever you need to view the app, you can use this command.starTipDid you know you can also pass a URL to streamlit run? This is great when combined with GitHub Gists. For example:streamlit run https://raw.githubusercontent.com/streamlit/demo-uber-nyc-pickups/master/streamlit_app.py
+As usual, the app should automatically open in a new tab in your
+browser.Fetch some dataNow that you have an app, the next thing you'll need to do is fetch the Uber
+dataset for pickups and drop-offs in New York City.Let's start by writing a function to load the data. Add this code to your
+script:DATE_COLUMN = 'date/time'
+DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
+         'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
+
+def load_data(nrows):
+    data = pd.read_csv(DATA_URL, nrows=nrows)
+    lowercase = lambda x: str(x).lower()
+    data.rename(lowercase, axis='columns', inplace=True)
+    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
+    return data
+You'll notice that load_data is a plain old function that downloads some
+data, puts it in a Pandas dataframe, and converts the date column from text
+to datetime. The function accepts a single parameter (nrows), which
+specifies the number of rows that you want to load into the dataframe.Now let's test the function and review the output. Below your function, add
+these lines:# Create a text element and let the reader know the data is loading.
+data_load_state = st.text('Loading data...')
+# Load 10,000 rows of data into the dataframe.
+data = load_data(10000)
+# Notify the reader that the data was successfully loaded.
+data_load_state.text('Loading data...done!')
+You'll see a few buttons in the upper-right corner of your app asking if
+you'd like to rerun the app. Choose Always rerun, and you'll see your
+changes automatically each time you save.Ok, that's underwhelming...It turns out that it takes a long time to download data, and load 10,000 lines
+into a dataframe. Converting the date column into datetime isn’t a quick job
+either. You don’t want to reload the data each time the app is updated –
+luckily Streamlit allows you to cache the data.Effortless cachingTry adding @st.cache_data before the load_data declaration:@st.cache_data
+def load_data(nrows):
+Then save the script, and Streamlit will automatically rerun your app. Since
+this is the first time you’re running the script with @st.cache_data, you won't
+see anything change. Let’s tweak your file a little bit more so that you can
+see the power of caching.Replace the line data_load_state.text('Loading data...done!') with this:data_load_state.text("Done! (using st.cache_data)")
+Now save. See how the line you added appeared immediately? If you take a
+step back for a second, this is actually quite amazing. Something magical is
+happening behind the scenes, and it only takes one line of code to activate
+it.How's it work?Let's take a few minutes to discuss how @st.cache_data actually works.When you mark a function with Streamlit’s cache annotation, it tells Streamlit
+that whenever the function is called that it should check two things:The input parameters you used for the function call.The code inside the function.If this is the first time Streamlit has seen both these items, with these exact
+values, and in this exact combination, it runs the function and stores the
+result in a local cache. The next time the function is called, if the two
+values haven't changed, then Streamlit knows it can skip executing the function
+altogether. Instead, it reads the output from the local cache and passes it on
+to the caller -- like magic."But, wait a second," you’re saying to yourself, "this sounds too good to be
+true. What are the limitations of all this awesomesauce?"Well, there are a few:Streamlit will only check for changes within the current working directory.
+If you upgrade a Python library, Streamlit's cache will only notice this if
+that library is installed inside your working directory.If your function is not deterministic (that is, its output depends on random
+numbers), or if it pulls data from an external time-varying source (for
+example, a live stock market ticker service) the cached value will be
+none-the-wiser.Lastly, you should avoid mutating the output of a function cached with st.cache_data since cached
+values are stored by reference.While these limitations are important to keep in mind, they tend not to be an
+issue a surprising amount of the time. Those times, this cache is really
+transformational.starTipWhenever you have a long-running computation in your code, consider
+refactoring it so you can use @st.cache_data, if possible. Please read Caching for more details.Now that you know how caching with Streamlit works, let’s get back to the Uber
+pickup data.Inspect the raw dataIt's always a good idea to take a look at the raw data you're working with
+before you start working with it. Let's add a subheader and a printout of the
+raw data to the app:st.subheader('Raw data')
+st.write(data)
+In the Main concepts guide you learned that
+st.write will render almost anything you pass
+to it. In this case, you're passing in a dataframe and it's rendering as an
+interactive table.st.write tries to do the right thing based on
+the data type of the input. If it isn't doing what you expect you can use a
+specialized command like st.dataframe
+instead. For a full list, see API reference.Draw a histogramNow that you've had a chance to take a look at the dataset and observe what's
+available, let's take things a step further and draw a histogram to see what
+Uber's busiest hours are in New York City.To start, let's add a subheader just below the raw data section:st.subheader('Number of pickups by hour')
+Use NumPy to generate a histogram that breaks down pickup times binned by
+hour:hist_values = np.histogram(
+    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
+Now, let's use Streamlit's
+st.bar_chart() method to draw this
+histogram.st.bar_chart(hist_values)
+Save your script. This histogram should show up in your app right away.
+After a quick review, it looks like the busiest time is 17:00 (5 P.M.).To draw this diagram we used Streamlit's native bar_chart() method, but it's
+important to know that Streamlit supports more complex charting libraries like
+Altair, Bokeh, Plotly, Matplotlib and more. For a full list, see
+supported charting libraries.Plot data on a mapUsing a histogram with Uber's dataset helped us determine what the busiest
+times are for pickups, but what if we wanted to figure out where pickups were
+concentrated throughout the city. While you could use a bar chart to show this
+data, it wouldn't be easy to interpret unless you were intimately familiar with
+latitudinal and longitudinal coordinates in the city. To show pickup
+concentration, let's use Streamlit st.map()
+function to overlay the data on a map of New York City.Add a subheader for the section:st.subheader('Map of all pickups')
+Use the st.map() function to plot the data:st.map(data)
+Save your script. The map is fully interactive. Give it a try by panning or
+zooming in a bit.After drawing your histogram, you determined that the busiest hour for Uber
+pickups was 17:00. Let's redraw the map to show the concentration of pickups
+at 17:00.Locate the following code snippet:st.subheader('Map of all pickups')
+st.map(data)
+Replace it with:hour_to_filter = 17
+filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
+st.subheader(f'Map of all pickups at {hour_to_filter}:00')
+st.map(filtered_data)
+You should see the data update instantly.To draw this map we used the st.map function that's built into Streamlit, but
+if you'd like to visualize complex map data, we encourage you to take a look at
+the st.pydeck_chart.Filter results with a sliderIn the last section, when you drew the map, the time used to filter results was
+hardcoded into the script, but what if we wanted to let a reader dynamically
+filter the data in real time? Using Streamlit's widgets you can. Let's add a
+slider to the app with the st.slider() method.Locate hour_to_filter and replace it with this code snippet:hour_to_filter = st.slider('hour', 0, 23, 17)  # min: 0h, max: 23h, default: 17h
+Use the slider and watch the map update in real time.Use a button to toggle dataSliders are just one way to dynamically change the composition of your app.
+Let's use the st.checkbox function to add a
+checkbox to your app. We'll use this checkbox to show/hide the raw data
+table at the top of your app.Locate these lines:st.subheader('Raw data')
+st.write(data)
+Replace these lines with the following code:if st.checkbox('Show raw data'):
+    st.subheader('Raw data')
+    st.write(data)
+We're sure you've got your own ideas. When you're done with this tutorial, check out all the widgets that Streamlit exposes in our API Reference.Let's put it all togetherThat's it, you've made it to the end. Here's the complete script for our interactive app.starTipIf you've skipped ahead, after you've created your script, the command to run
+Streamlit is streamlit run [app name].import streamlit as st
+import pandas as pd
+import numpy as np
+
+st.title('Uber pickups in NYC')
+
+DATE_COLUMN = 'date/time'
+DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
+            'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
+
+@st.cache_data
+def load_data(nrows):
+    data = pd.read_csv(DATA_URL, nrows=nrows)
+    lowercase = lambda x: str(x).lower()
+    data.rename(lowercase, axis='columns', inplace=True)
+    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
+    return data
+
+data_load_state = st.text('Loading data...')
+data = load_data(10000)
+data_load_state.text("Done! (using st.cache_data)")
+
+if st.checkbox('Show raw data'):
+    st.subheader('Raw data')
+    st.write(data)
+
+st.subheader('Number of pickups by hour')
+hist_values = np.histogram(data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
+st.bar_chart(hist_values)
+
+# Some number in the range 0-23
+hour_to_filter = st.slider('hour', 0, 23, 17)
+filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
+
+st.subheader('Map of all pickups at %s:00' % hour_to_filter)
+st.map(filtered_data)
+Share your appAfter you’ve built a Streamlit app, it's time to share it! To show it off to the world you can use Streamlit Community Cloud to deploy, manage, and share your app for free.It works in 3 simple steps:Put your app in a public GitHub repo (and make sure it has a requirements.txt!)Sign into share.streamlit.ioClick 'Deploy an app' and then paste in your GitHub URLThat's it! 🎈 You now have a publicly deployed app that you can share with the world. Click to learn more about how to use Streamlit Community Cloud.Get helpThat's it for getting started, now you can go and build your own apps! If you
+run into difficulties here are a few things you can do.Check out our community forum and post a questionQuick help from command line with streamlit helpGo through our Knowledge Base for tips, step-by-step tutorials, and articles that answer your questions about creating and deploying Streamlit apps.Read more documentation! Check out:Advanced features for things like caching, theming, and adding statefulness to apps.API reference for examples of every Streamlit command.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Main conceptsNext: Multipage appsHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Changelog - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/ChangelogChangelogThis page lists highlights, bug fixes, and known issues for official Streamlit releases. If you're looking for information about nightly releases, beta features, or experimental features, see Try pre-release features.starTipTo upgrade to the latest version of Streamlit, run:pip install --upgrade streamlit
+Version 1.22.0Release date: April 27, 2023Highlights🔌 Introducing st.experimental_connection: Easily connect your app to data sources and APIs using our new connection feature. Find more details in the API reference, and stay tuned for an upcoming blog post and in-depth documentation! In the meantime, explore our updated MySQL and Snowflake connection tutorials for examples of this feature.Notable Changes🐼 Streamlit now supports Pandas 2.0 (#6413, #6378, #6507). Thanks, connortann!🍔 Customize the visibility of items in the toolbar, options menu, and the settings dialog using the client.toolbarMode config option (#6174).🪵 Streamlit logs now reside in the "streamlit" namespace instead of the root logger, enabling app developers to better manage log handling (#3978, #6377).Other Changes🔏 CLI parameters can no longer be used to set sensitive configuration values (#6376).🤖 Improved the debugging experience by reducing log noise (#6391).🐞 Bug fix: @st.cache_data decorated functions support UUID objects as parameters (#6440, #6459).🐛 Bug fix: Tabbing through buttons and other elements now displays a red border only when focused, not when clicked (#6373).🪲 Bug fix: st.multiselect's clear icon is larger and includes a hover effect (#6471).🐜 Bug fix: Custom theme font settings no longer apply to code blocks (#6484, #6535).©️ Bug fix: st.code's copy-to-clipboard button appears when you hover on code blocks (#6490, #6498).Version 1.21.0Release date: April 6, 2023Highlights📏 Introducing st.divider — a command that displays a horizontal line in your app. Learn how to use this command in its API reference.🔏 Streamlit now supports the use of a global secrets.toml file, in addition to a project-level file, to easily store and securely access your secrets. Learn more in Secrets management.🚀 st.help has been revamped to show more information about object methods, attributes, classes, and more, which is great for debugging (#5857, #6382)!Notable Changes🪜 st.time_input supports adding a stepping interval with the keyword-only step parameter (#6071).❓ Most text elements can include tooltips with the help parameter (#6043).↔️ st.pyplot has a use_container_width parameter to set the chart to the container width (now all chart elements support this parameter) (#6067).👩‍💻 st.code supports optionally displaying line numbers to the code block’s left with the boolean line_numbers parameter (#5756, #6042).⚓ Anchors in header elements can be turned off by setting anchor=False (#6158).Other Changes🐼 st.table and st.dataframe support pandas.Period, and number and boolean types in categorical columns (#2547, #5429, #5329, #6248).🕸️ Added .webp to the list of allowed static file extensions (#6331)🐞 Bug fix: stop script execution on websocket close to immediately clear session information (#6166, #6204).🐜 Bug fixes: updated allowed/disallowed label markdown behavior such that unsupported elements are unwrapped and only their children (text contents) render (#5872, #6036, #6054, #6163).🪲 Bug fixes: don’t push browser history states on rerun, use HTTPS to load external resources in streamlit hello, and make the browser back button work for multipage apps (#5292, #6266, #6232). Thanks, whitphx!🐝 Bug fix: avoid showing emoji on non-UTF-8 terminals. (#2284, #6088). Thanks, kcarnold!📁 Bug fix: override default use of File System Access API for react-dropzone so that st.file_uploader's File Selection Dialog only shows file types corresponding to those included in the type parameter (#6176, #6315).💾 Bug fix: make the .clear() method on cache-decorated functions work (#6310, #6321).🏃 Bug fix: st.experimental_get_query_params doesn’t need reruns to work (#6347, #6348). Thanks, PaleNeutron!🐛 Bug fix: CachedStFunctionWarning mentions experimental_allow_widgets instead of the deprecated suppress_st_warning (#6216, #6217).Version 1.20.0Release date: March 09, 2023Notable Changes🔐 Added support for configuring SSL to serve apps directly over HTTPS (#5969).🖼️ Granular control over app embedding behavior with the /?embed and /?embed_options query parameters. Learn how to use this feature in our docs (#6011, #6019).⚡ Enabled the runner.fastReruns configuration option by default to make apps much more responsive to user interaction (#6200).Other Changes🍔 Cleaned up the hamburger menu by removing the least used options (#6080).🖨️ Design changes to ensure apps being printed or saved as a PDF look good (#6180).🐞 Bug fix: improved dtypes checking in st.experimental_data_editor (#6185, #6188).🐛 Bug fix: properly position st.metric's help tooltip when not inside columns (#6168).🪲 Bug fix: regression in retrieving messages from the server's ForwardMsgCache (#6210).🌀 Bug fix: st.cache_data docstring for the show_spinner param now lists str as a supported type (#6207, #6213).⏱️ Made ping and websocket timeouts far more forgiving (#6212).🗺️ st.map and st.pydeck_chart docs state that Streamlit's Mapbox token will not work indefinitely (#6143).Version 1.19.0Release date: February 23, 2023Highlights✂️ Introducing st.experimental_data_editor, a widget that allows you to edit DataFrames and many other data structures in a table-like UI. Read more in our documentation and blog post.Other Changes✨ Streamlit’s GitHub README got a new look (#6016).🌚 Improved readability of styled dataframe cells in dark mode (#6060, #6098).🐛 Bug fix: make apps work again in the latest versions of Safari, and in Chrome with third-party cookies blocked (#6092, #6094, #6087, #6100).🐞 Bug fix: refer to new cache primitives in the “Clear cache” dialog and error messages (#6082, #6128).🐝 Bug fix: properly cache class member functions and instance methods (#6109, #6114).🐜 Bug fix: regression in st.metric tooltip position (#6093, #6129).🪲 Bug fix: allow fullscreen button to show for dataframes, charts, etc, in expander (#6083, #6148).Version 1.18.0Release date: February 09, 2023Highlights🎊 Introducing @st.cache_data and @st.cache_resource — two new caching commands to replace st.cache! Check out our blog post and documentation for more information.Notable Changes🪆 st.columns supports up to one level of column nesting (i.e., columns inside columns) in the main area of the app.⏳ st.progress supports adding a message to display above the progress bar with the text keyword parameter.↔️ st.button has an optional use_container_width parameter to allow you to stretch buttons across the full container width.🐍 We formally added support for Python 3.11.🖨️ Save your app as a PDF via the “Print” option in your app’s hamburger menu.🛎️ Apps can serve small, static media files via the enableStaticServing config option. See our documentation on how to use this feature and our demo app for an example.Other Changes🏁 All Streamlit endpoints (including /healthz) have been renamed to have a consistent pattern and avoid any clashes with reserved endpoints of GCP (notably Cloud Run and App Engine) (#5534).⚡ Improved caching performance when multiple sessions access an uncomputed cached value simultaneously (#6017).🚧 Streamlit only displays deprecation warnings in the browser when the client.showErrorDetails config option is set to True. Deprecation warnings always get logged to the console, regardless of whether they're displayed in-browser (#5945).🏓 Refactored the st.dataframe internals to improve dataframe handling and conversion, such as detecting more types, converting key-value dicts to dataframes, and more (#6026, #6023).💽 The behavior of widget labels when they are passed unsupported Markdown elements is documented (#5978).📊 Bug fix: Plotly improvements — upgraded multiple frontend dependencies, including Plotly, to the latest version to properly redraw cached charts, make Plotly mapbox animations work, and allow users to update the figure layout when using the Streamlit theme (#5885, #5967, #6055).📶 Bug fix: allow browser tabs that transiently disconnect (due to a network blip, load balancer timeout, etc.) to avoid losing all of their state (#5856).📱 Bug fix: the keyboard is hidden on mobile when st.selectbox and st.multiselect have less than 10 options (#5979).🐝 Bug fix: design tweaks to st.metric, st.multiselect, st.tabs , and menu items to prevent label overflow and scrolling issues, especially with small viewport sizes (#5933, #6034).🐞 Bug fix: switched to a functioning Twemoji URL from which page favicons are loaded in st.set_page_config (#5943).✍️ More type hints (#5986). Thanks, harahu!Version 1.17.0Release date: January 12, 2023Notable Changes🪄 @st.experimental_singleton supports an optional validate parameter that accepts a validation function for cached data and is called each time the cached value is accessed.💾  @st.experimental_memo’s persist parameter can also accept booleans.Other Changes📟 Multipage apps exclude __init__.py from the page selector (#5890).📐 The iframes of embedded apps have the ability to dynamically resize their height (#5894).🐞 Bug fix: thumb values of range sliders respect the container width (#5913).🪲 Bug fix: all examples in docstrings of Streamlit commands contain relevant imports to make them reproducible (#5877).Version 1.16.0Release date: December 14, 2022Highlights👩‍🎨 Introducing a new Streamlit theme for Altair, Plotly, and Vega-Lite charts! Check out our blog post for more information.🎨 Streamlit now supports colored text in all commands that accept Markdown, including st.markdown, st.header, and more. Learn more in our documentation.Notable Changes🔁 Functions cached with st.experimental_memo or st.experimental_singleton can contain Streamlit media elements and forms.⛄ All Streamlit commands that accept pandas DataFrames as input also support Snowpark and PySpark DataFrames.🏷 st.checkbox and st.metric can customize how to hide their labels with the label_visibility parameter.Other Changes🗺️ st.map improvements: support for upper case columns and better exception messages (#5679, #5792).🐞 Bug fix: st.plotly_chart respects the figure’s height attribute and the use_container_width parameter (#5779).🪲 Bug fix: all commands with the icon parameter such as st.error, st.warning, etc, can contain emojis with variant selectors (#5583).🐝 Bug fix: prevent st.camera_input from jittering when resizing the browser window (#5661).🐜 Bug fix: update exception layout to avoid overflow of stack traces (#5700).Version 1.15.0Release date: November 17, 2022Notable Changes💅 Widget labels can contain inline Markdown. See our docs and demo app for more info.🎵 st.audio now supports playing audio data passed in as NumPy arrays with the keyword-only sample_rate parameter.🔁 Functions cached with st.experimental_memo or st.experimental_singleton can contain Streamlit widgets using the experimental_allow_widgets parameter. This allows caching checkboxes, sliders, radio buttons, and more!Other Changes👩‍🎨 Design tweak to prevent jittering in sliders (#5612).🐛 Bug fix: links in headers are red, not blue (#5609).🐞 Bug fix: properly resize Plotly charts when exiting fullscreen (#5645).🐝: Bug fix: don’t accidentally trigger st.balloons and st.snow (#5401).Version 1.14.0Release date: October 27, 2022Highlights🎨 st.button and st.form_submit_button support designating buttons as "primary" (for additional emphasis) or "secondary" (for normal buttons) with the type keyword-only parameter.Notable Changes🤏 st.multiselect has a keyword-only max_selections parameter to limit the number of options that can be selected at a time.📄 st.form_submit_button now has the disabled parameter that removes interactivity.Other Changes🏓 st.dataframe and st.table accept categorical intervals as input (#5395).⚡ Performance improvements to Plotly charts (#5542).🪲 Bug fix: st.download_button supports non-latin1 characters in filenames (#5465).🐞 Bug fix: Allow st.image to render a local GIF as a GIF, not as a static PNG (#5438).📱 Design tweaks to the sidebar in multipage apps (#5538, #5445, #5559).📊 Improvements to the axis configuration for built-in charts (#5412).🔧 Memo and singleton improvements: support text values for show_spinner, use datetime.timedelta objects as ttl parameter value, properly hash PIL images and Enum classes, show better error messages when returning unevaluated dataframes (#5447, #5413, #5504, #5426, #5515).🔍 Zoom buttons in maps created with st.map and st.pydeck_chart use light or dark style based on the app’s theme (#5479).🗜 Websocket headers from the current session's incoming WebSocket request can be obtained from a new "internal" (i.e.: subject to change without deprecation) API (#5457).📝 Improve the text that gets printed when you first install and use Streamlit (#5473).Version 1.13.0Release date: September 22, 2022Notable Changes🏷 Widgets can customize how to hide their labels with the label_visibility parameter.🔍 st.map adds zoom buttons to the map by default.↔️ st.dataframe supports the use_container_width parameter to stretch across the full container width.🪄 Improvements to st.dataframe sizing: Column width calculation respects column headers, supports double click between column headers to autosize, better fullscreen support, and fixes the issue with the width parameter.Other Changes⌨️ st.time_input allows for keyboard-only input (#5194).💿 st.memo will warn the user when using ttl and persist keyword argument together (#5032).🔢 st.number_input returns consistent type after rerun (#5359).🚒 st.sidebar UI fixes including a fix for scrollbars in Firefox browsers (#5157, #5324).👩‍💻 Improvements to usage metrics to guide API development.✍️ More type hints! (#5191, #5192, #5242, #5243, #5244, #5245, #5246) Thanks harahu!Version 1.12.0Release date: August 11, 2022Highlights📊 Built-in charts (e.g. st.line_chart) get a brand-new look and parameters x and y! Check out our blog post for more information.Notable Changes⏯ Functions cached with st.experimental_memo or st.experimental_singleton can now contain static st commands. This allows caching text, charts, dataframes, and more!↔️ The sidebar is now resizable via drag and drop.☎️ st.info, st.success, st.error, and st.warning got a redesign and have a new keyword-only parameter: icon.Other Changes🎚️ st.select_slider correctly handles all floats now (#4973, #4978).🔢 st.multi_select can take values from enums (#4987).🍊 st.slider range values can now be set through st.session_state (#5007).🎨 st.progress got a redesign (#5011, #5086).🔘 st.radio better deals with list-like dataframes (#5021).🧞‍♂️ st.cache properly handles JSON files now (#5023).⚓️ Headers render markdown now when the anchor parameter is set (#5038).🗻 st.image can now load SVGs from Inkscape (#5040).🗺️ st.map and st.pydeck_chart use light or dark style based on the app’s theme (#5074, #5108).🎈 Clicks on elements below st.balloons and st.snow don’t get blocked anymore (#5098).🔝 Embedded apps have lower top padding (#5111).💅 Adjusted padding and alignment for widgets, charts, and dataframes (#4995, #5061, #5081).✍️ More type hints! (#4926, #4932, #4933)Version 1.11.0Release date: July 14, 2022Highlights🗂 Introducing st.tabs to have tab containers in your app. See our documentation on how to use this feature.Notable Changesℹ️ st.metric supports tooltips with the help keyword parameter.🚇 st.columns supports setting the gap size between columns with the gap keyword parameter.Other Changes💅 Design tweaks to st.selectbox, st.expander, st.spinner (#4801).📱 The sidebar will close when users select a page from the navigation menu on mobile devices (#4851).🧠 st.memo supports dataclasses! (#4850)🏎 Bug fix for a race condition that destroyed widget state with rapid interaction (#4882).🏓 st.table presents overflowing content to be scrollable when placed inside columns and expanders (#4934).🐍 Types: More updated type annotations across Streamlit! (#4808, #4809, #4856)Version 1.10.0Release date: June 2, 2022Highlights📖 Introducing native support for multipage apps! Check out our blog post and try out our new streamlit hello.Notable Changes✨ st.dataframe has been redesigned.🔘 st.radio has a horizontal keyword-only parameter to display options horizontally.⚠️ Streamlit Community Cloud will support richer exception formatting.🏂 Get user information on private apps using st.experimental_user.Other Changes📊 Upgraded Vega-Lite library to support even more interactive charting improvements. See their release notes to find out more. (#4751).📈 st.vega_lite_chart will respond to updates, particularly in response to input widgets (#4736).💬 st.markdown with long text will always wrap (#4696).📦 Support for PDM (#4724).✍️ Types: Updated type annotations across Streamlit! (#4679, #4680, #4681, #4682, #4683, #4684, #4685, #4686, #4687, #4688, #4690, #4703, #4704, #4705, #4706, #4707, #4708, #4710, #4723, #4733).Version 1.9.0Release date: May 4, 2022Notable Changes🪗 st.json now supports a keyword-only argument, expanded on whether the JSON should be expanded by default (defaults to True).🏃‍♀️ More performance improvements from reducing redundant work each script run.Other Changes🏇 Widgets when disabled is set/unset will maintain its value (#4527).🧪 Experimental feature to increase the speed of reruns using configuration runner.fastReruns. See #4628 for the known issues in enabling this feature.🗺️ DataFrame timestamps support UTC offset (in addition to time zone notation) (#4669).Version 1.8.0Release date: March 24, 2022Notable Changes🏃‍♀️ Dataframes should see performance improvements (#4463).Other Changes🕰 st.slider handles timezones better by removing timezone conversions on the backend (#4348).👩‍🎨 Design improvements to our header (#4496).Version 1.7.0Release date: March 3, 2022HighlightsIntroducing st.snow, celebrating our acquisition by Snowflake! See more information in our blog post.Version 1.6.0Release date: Feb 24, 2022Other Changes🗜 WebSocket compression is now disabled by default, which will improve CPU and latency performance for large dataframes. You can use the server.enableWebsocketCompression configuration option to re-enable it if you find the increased network traffic more impactful.☑️ 🔘 Radio and checkboxes improve focus on Keyboard navigation (#4308).Version 1.5.0Release date: Jan 27, 2022Notable Changes🌟 Favicon defaults to a PNG to allow for transparency (#4272).🚦 Select Slider Widget now has the disabled parameter that removes interactivity (completing all of our widgets) (#4314).Other Changes🔤 Improvements to our markdown library to provide better support for HTML (specifically nested HTML) (#4221).📖 Expanders maintain their expanded state better when multiple expanders are present (#4290).🗳 Improved file uploader and camera input to call its on_change handler only when necessary (#4270).Version 1.4.0Release date: Jan 13, 2022Highlights📸 Introducing st.camera_input for uploading images straight from your camera.Notable Changes🚦 Widgets now have the disabled parameter that removes interactivity.🚮 Clear st.experimental_memo and st.experimental_singleton programmatically by using the clear() method on a cached function.📨 Developers can now configure the maximum size of a message to accommodate larger messages within the Streamlit application. See server.maxMessageSize.🐍 We formally added support for Python 3.10.Other Changes😵‍💫 Calling str or repr on threading.current_thread() does not cause a RecursionError (#4172).📹 Gracefully stop screencast recording when user removes permission to record (#4180).🌇 Better scale images by using a higher-quality image bilinear resampling algorithm (#4159).Version 1.3.0Release date: Dec 16, 2021Notable Changes💯 Support for NumPy values in st.metric.🌐 Support for Mesh Layers in PyDeck.📊 Updated Plotly chart version to support the latest features.🏀 st.spinner element has visual animated spinner.🍰 st.caption supports HTML in text with unsafe_allow_html parameter.Other Changes🪲 Bug fix: Allow st.session_state to be used to set number_input values with no warning (#4047).🪲 Bug fix: Fix footer alignment in wide mode (#4035).🐞 Bug fix: Better support for Graphviz and Bokeh charts in containers (columns, expanders, etc.) (#4039).🐞 Bug fix: Support inline data values in Vega-Lite (#4070).✍️ Types: Updated type annotations for experimental memo and singleton decorators.✍️ Types: Improved type annotations for st.selectbox, st.select_slider, st.radio, st.number_input, and st.multiselect.Version 1.2.0Release date: Nov 11, 2021Notable Changes✏️ st.text_input and st.text_area now have a placeholder parameter to display text when the field is empty.📏 Viewers can now resize the input box in st.text_area.📁 Streamlit can auto-reload when files in sub-directories change.🌈 We've upgraded Bokeh support to 2.4.1! We recommend updating your Bokeh library to 2.4.1 to maintain functionality. Going forward, we'll let you know if there's a mismatch in your Bokeh version via an error prompt.🔒 Developers can access secrets via attribute notation (e.g. st.secrets.key vs st.secrets["key"]) just like session state.✍️ Publish type annotations according to PEP 561. Users now get type annotations for Streamlit when running mypy (#4025).Other Changes👀 Visual fixes (#3863, #3995, #3926, #3975).🍔 Fixes to the hamburger menu (#3968).🖨️ Ability to print session state (#3970).Version 1.1.0Release date: Oct 21, 2021Highlights🧠 Memory improvements: Streamlit apps allocate way less memory over time now.Notable Changes♻️ Apps automatically rerun now when the content of secrets.toml changes (before this you had to refresh the page manually).Other Changes🔗 Redirected some links to our brand-new docs site, e.g. in exceptions.🪲 Bug fix: Allow initialization of range slider with session state (#3586).🐞 Bug fix: Refresh chart when using add_rows with datetime index (#3653).✍️ Added some more type annotation in our codebase (#3908).Version 1.0.0Release date: Oct 5, 2021Highlights🎈Announcing Streamlit 1.0! To read more about check out our 1.0 blog post.Other Changes🐞 Fixed an issue where using df.dtypes to show datatypes for a DF fails while using Arrow (#3709), Image captions stay within image width and are readable (#3530).Version 0.89.0Release date: Sep 22, 2021Highlights💰 Introducing st.experimental_memo and experimental_singleton, a new primitive for caching! See our blog post.🍔 Streamlit allows developers to configure their hamburger menu to be more user-centric.Notable Changes💅 We updated our UI to a more polished look with a new font.🎨 We now support theme.base in the theme object when it's sent to custom components.🧠 We've modified session state to reset widgets if any of their arguments changed even if they provide a key.Some widget behavior may have changed, but we believe this change makes the most sense. We have added a section to our documentation describing how they behave.Other Changes🐞 Bug fixes: Support svgs from a URL (#3809) and that do not start with <svg> tag (#3789).Version 0.88.0Release date: Sep 2, 2021Highlights⬇️ Introducing st.download_button, a new button widget for easily downloading files.Notable Changes🛑 We made changes to improve the redacted exception experience on Streamlit Community Cloud. When client.showErrorDetails=true exceptions display the Error Type and the Traceback, but redact the actual error text to prevent data leaks.Version 0.87.0Release date: Aug 19, 2021Highlights🔢 Introducing st.metric, an API for displaying KPIs. Check out the demo app showcasing the functionality.Other Changes🐞 Bug Fixes: File uploader retains state upon expander closing (#3557), setIn Error with st.empty (#3659), Missing IFrame embeds in docs (#3706), Fix error writing certain PNG files (#3597).Version 0.86.0Release date: Aug 5, 2021Highlights🎓 Our layout primitives are graduating from beta! You can now use st.columns, st.container and st.expander without the beta_ prefix.Notable Changes📱 When using st.columns, columns will stack vertically when viewport size <640px so that column layout on smaller viewports is consistent and cleaner. (#3594).Other Changes🐞 Bug fixes: Fixed st.date_input crashes if its empty (#3194), Opening files with utf-8(#3022), st.select_slider resets its state upon interaction (#3600).Version 0.85.0Release date: Jul 22, 2021Highlights🏹 Streamlit now uses Apache Arrow for serializing data frames when they are sent from Streamlit server to the front end. See our blog post.(Users who wish to continue using the legacy data frame serialization can do so by setting the dataFrameSerialization config option to "legacy" in their config.toml).Other Changes🐞 Bug fixes: Unresponsive pydeck example (#3395), JSON parse error message (#2324), Tooltips rendering (#3300), Colorpicker not working on Streamlit Sharing (#2689).Version 0.84.0Release date: Jul 1, 2021Highlights🧠 Introducing st.session_state and widget callbacks to allow you to add statefulness to your apps. Check out the blog postNotable Changes🪄 st.text_input now has an autocomplete parameter to allow password managers to be usedOther ChangesUsing st.set_page_config to assign the page title no longer appends “Streamlit” to that title (#3467)NumberInput: disable plus/minus buttons when the widget is already at its max (or min) value (#3493)Version 0.83.0Release date: Jun 17, 2021Highlights🛣️ Updates to Streamlit docs to include step-by-step guides which demonstrate how to connect Streamlit apps to various databases & APIsNotable Changes📄 st.form now has a clear_on_submit parameter which "resets" all the form's widgets when the form is submitted.Other ChangesFixed bugs regarding file encodings (#3320, #3108, #2731)Version 0.82.0Release date: May 13, 2021Notable Changes♻️ Improvements to memory management by forcing garbage collection between script runs.Version 0.81.1Release date: Apr 29, 2021Highlights📝 Introducing st.form and st.form_submit_button to allow you to batch input widgets. Check out our blog post🔤 Introducing st.caption so you can add explainer text anywhere in you apps.🎨 Updates to Theming, including ability to build a theme that inherits from any of our default themes.🚀 Improvements to deployment experience to Streamlit sharing from the app menu.Other changesSupport for binary files in Custom Components (#3144)Version 0.80.0Release date: Apr 8, 2021Highlights🔐 Streamlit now support Secrets management for apps deployed to Streamlit Sharing!⚓️ Titles and headers now come with automatically generated anchor links. Just hover over any title and click the 🔗 to get the link!Other changesAdded allow-downloads capability to custom components (#3040)Fixed markdown tables in dark theme (#3020)Improved color picker widget in the Custom Theme dialog (#2970)Version 0.79.0Release date: Mar 18, 2021Highlights🌈 Introducing support for custom themes. Check out our blog post🌚 This release also introduces dark mode!🛠️ Support for tooltips on all input widgetsOther changesFixed bugs regarding file encodings (#1936, #2606) and caching functions (#2728)Version 0.78.0Release date: Mar 4, 2021FeaturesIf you're in the Streamlit for Teams beta, we made a few updates to how secrets work. Check the beta docs for more info!Dataframes now displays timezones for all DateTime and Time columns, and shows the time with the timezone applied, rather than in UTCNotable Bug FixesVarious improvement to column alignment in st.beta_columnsRemoved the long-deprecated format param from st.image, and replaced with output_format.Version 0.77.0Release date: Feb 23, 2021FeaturesAdded a new config option client.showErrorDetails allowing the developer to control the granularity of error messages. This is useful for when you deploy an app, and want to conceal from your users potentially-sensitive information contained in tracebacks.Notable bug fixesFixed bug where st.image wasn't rendering certain kinds of SVGs correctly.Fixed regression where the current value of an st.slider was only shown on hover.Version 0.76.0Release date: February 4, 2021Notable Changes🎨 st.color_picker is now out of beta. This means the old beta_color_picker function, which was marked as deprecated for the past 3 months, has now been replaced with color_picker.🐍 Display a warning when a Streamlit script is run directly as python script.py.st.image's use_column_width now defaults to an auto option which will resize the image to the column width if the image exceeds the column width.✂️ Fixed bugs (2437 and 2247) with content getting cut off within a st.beta_expander📜 Fixed a bug in st.dataframe where the scrollbar overlapped with the contents in the last column.💾 Fixed a bug for st.file_uploader where file data returned was not the most recently uploaded file.➕ Fixed bugs (2086 and 2556) where some LaTeX commands were not rendering correctly.Version 0.75.0Release date: January 21, 2021Notable Changes🕳 st.empty
+previously would clear the component at the end of the script. It has now been
+updated to clear the component instantly.🛹 Previously in wide mode, we had thin margins around the webpage. This has
+now been increased to provide a better visual experience.Version 0.74.0Release date: January 6, 2021Notable Changes💾 st.file_uploader. has been stabilized and the deprecation warning
+and associated configuration option (deprecation.showfileUploaderEncoding) has been removed.📊 st.bokeh_chart is no longer duplicated when the page loads.🎈 Fixed page icon to support emojis with variants (i.e. 🤦‍♀️ vs 🤦🏼‍♀️) or dashes (i.e 🌙 - crescent-moon).Version 0.73.0Release date: December 17, 2020Notable Changes🐍 Streamlit can now be installed on Python 3.9. Streamlit components are not
+yet compatible with Python 3.9 and must use version 3.8 or earlier.🧱 Streamlit Components now allows same origin, enabling features provided by
+the browser such as a webcam component.🐙 Fix Streamlit sharing deploy experience for users running on Git versions
+2.7.0 or earlier.🧰 Handle unexpected closing of uploaded files for st.file_uploader.Version 0.72.0Release date: December 2, 2020Notable Changes🌈 Establish a framework for theming and migrate existing components.📱 Improve the sidebar experience for mobile devices.🧰 Update st.file_uploader to reduce reruns.Version 0.71.0Release date: November 11, 2020Notable Changes📁 Updated st.file_uploader
+to automatically reset buffer on app reruns.📊 Optimize the default rendering of charts and reduce issues with the initial render.Version 0.70.0Release date: October 28, 2020Notable Changes🧪 st.set_page_config and st.color_picker have now been moved into the
+Streamlit namespace. These will be removed from beta January 28th, 2021. Learn
+more about our beta process here.📊 Improve display of bar charts for discrete values.Version 0.69.0Release date: October 15, 2020Highlights:🎁 Introducing Streamlit sharing, the best way to deploy, manage, and share your public Streamlit apps—for free. Read more about it on our blog post or sign up here!Added st.experimental_rerun to programatically re-run your app. Thanks SimonBiggs!Notable Changes📹 Better support across browsers for start and stop times for st.video.🖼 Bug fix for intermittently failing media files📦 Bug fix for custom components compatibility with Safari. Make sure to upgrade to the latest streamlit-component-lib.Version 0.68.0Release date: October 8, 2020Highlights:⌗ Introducing new layout options for Streamlit! Move aside, vertical layout.
+Make a little space for... horizontal layout! Check out our
+blog post.💾 File uploader redesigned with new functionality for multiple files uploads
+and better support for working with uploaded files. This may cause breaking
+changes. Please see the new api in our
+documentationNotable Changes🎈 st.balloon has gotten a facelift with nicer balloons and smoother animations.🚨 Breaking Change: Following the deprecation of st.deck_gl_chart in
+January 2020, we have now removed the API completely. Please use
+st.pydeck_chart instead.🚨 Breaking Change: Following the deprecation of width and height for
+st.altair_chart, st.graphviz_chart, st.plotly_chart, and
+st.vega_lite_chart in January 2020, we have now removed the args completely.
+Please set the width and height in the respective charting library.Version 0.67.0Release date: September 16, 2020Highlights:🦷 Streamlit Components can now return bytes to your Streamlit App. To create a
+component that returns bytes, make sure to upgrade to the latest
+streamlit-component-lib.Notable Changes📈 Deprecation warning: Beginning December 1st, 2020 st.pyplot() will require a figure to
+be provided. To disable the deprecation warning, please set deprecation.showPyplotGlobalUse
+to False🎚 st.multiselect and st.select are now lightning fast when working with large datasets. Thanks masa3141!Version 0.66.0Release date: September 1, 2020Highlights:✏️ st.write is now available for use in the sidebar!🎚 A slider for distinct or non-numerical values is now available with st.select_slider.⌗ Streamlit Components can now return dataframes to your Streamlit App. Check out our SelectableDataTable example.📦 The Streamlit Components library used in our Streamlit Component template is
+now available as a npm package (streamlit-component-lib) to simplify future upgrades to the latest version.
+Existing components do not need to migrate.Notable Changes🐼 Support StringDtype from pandas version 1.0.0🧦 Support for running Streamlit on Unix socketsVersion 0.65.0Release date: August 12, 2020Highlights:⚙️ Ability to set page title, favicon, sidebar state, and wide mode via st.beta_set_page_config(). See our documentation for details.📝 Add stateful behaviors through the use of query parameters with st.experimental_set_query_params and st.experimental_get_query_params. Thanks @zhaoooyue!🐼 Improved pandas dataframe support for st.radio, st.selectbox, and st.multiselect.🛑 Break out of your Streamlit app with st.stop.🖼 Inline SVG support for st.image.Callouts:🚨Deprecation Warning: The st.image parameter format has been renamed to output_format.Version 0.64.0Release date: July 23, 2020Highlights:📊 Default matplotlib to display charts with a tight layout. To disable this,
+set bbox_inches to None, inches as a string, or a Bbox🗃 Deprecation warning for automatic encoding on st.file_uploader🙈 If gatherUserStats is False, do not even load the Segment library.
+Thanks @tanmaylaud!Version 0.63.0Release date: July 13, 2020Highlights:🧩 Support for Streamlit Components!!! See
+documentation for more info.🕗 Support for datetimes in
+st.slider. And, of course, just
+like any other value you use in st.slider, you can also pass in two-element lists to get a
+datetime range slider.Version 0.62.0Release date: June 21, 2020Highlights:📨 Ability to turn websocket compression on/off via the config option
+server.enableWebsocketCompression. This is useful if your server strips HTTP headers and you do
+not have access to change that behavior.🗝️ Out-of-the-box support for CSRF protection using the
+Cookie-to-header token
+technique. This means that if you're serving your Streamlit app from multiple replicas you'll need
+to configure them to to use the same cookie secret with the server.cookieSecret config option.
+To turn XSRF protection off, set server.enableXsrfProtection=false.Notable bug fixes:🖼️ Added a grace period to the image cache expiration logic in order to fix multiple related bugs
+where images sent with st.image or st.pyplot were sometimes missing.Version 0.61.0Release date: June 2, 2020Highlights:📅 Support for date ranges in st.date_picker. See
+docs
+for more info, but the TLDR is: just pass a list/tuple as the default date and it will be
+interpreted as a range.🗣️ You can now choose whether st.echo prints the code above or below the output of the echoed
+block. To learn more, refer to the code_location argument in the
+docs.📦 Improved @st.cache support for Keras models and Tensorflow saved_models.Version 0.60.0Release date: May 18, 2020Highlights:↕️ Ability to set the height of an st.text_area with the height argument
+(expressed in pixels). See
+docs for more.🔡 Ability to set the maximimum number of characters allowed in st.text_area
+or st.text_input. Check out the max_chars argument in the
+docs.🗺️ Better DeckGL support for the H3 geospatial indexing
+system. So now you can use things like H3HexagonLayer in
+st.pydeck_chart.📦 Improved @st.cache support for PyTorch TensorBase and Model.Version 0.59.0Release date: May 05, 2020Highlights:🎨 New color-picker widget! Use it with
+st.beta_color_picker()🧪 Introducing st.beta_* and st.experimental_* function prefixes, for faster
+Streamlit feature releases. See
+docs for more info.📦 Improved @st.cache support for SQL Alchemy objects, CompiledFFI, PyTorch
+Tensors, and builtins.mappingproxy.Version 0.58.0Release date: April 22, 2020Highlights:💼 Made st.selectbox filtering case-insensitive.㈬ Better support for Tensorflow sessions in @st.cache.📊 Changed behavior of st.pyplot to auto-clear the figure only when using
+the global Matplotlib figure (i.e. only when calling st.pyplot() rather
+than st.pyplot(fig)).Version 0.57.0Release date: March 26, 2020Highlights:⏲️ Ability to set expiration options for @st.cache'ed functions by setting
+the max_entries and ttl arguments. See
+docs.🆙 Improved the machinery behind st.file_uploader, so it's much more
+performant now! Also increased the default upload limit to 200MB
+(configurable via server.max_upload_size).🔒 The server.address config option now binds the server to that address
+for added security.📄 Even more details added to error messages for @st.cache for easier
+debugging.Version 0.56.0Release date: February 15, 2020Highlights:📄 Improved error messages for st.cache. The errors now also point to the new
+caching docs we just released. Read more
+here!Breaking changes:🐍 As announced last month,
+Streamlit no longer supports Python 2. To use Streamlit you'll need
+Python 3.5 or above.Version 0.55.0Release date: February 4, 2020Highlights:📺 Ability to record screencasts directly from Streamlit! This allows
+you to easily record and share explanations about your models, analyses,
+data, etc. Just click ☰ then "Record a screencast". Give it a try!Version 0.54.0Release date: January 29, 2020Highlights:⌨️ Support for password fields! Just pass type="password" to
+st.text_input().Notable fixes:✳️ Numerous st.cache improvements, including better support for complex objects.🗣️ Fixed cross-talk in sidebar between multiple users.Breaking changes:If you're using the SessionState hack Gist, you should re-download it!
+Depending on which hack you're using, here are some links to save you some
+time:SessionState.pyst_state_patch.pyVersion 0.53.0Release date: January 14, 2020Highlights:🗺️ Support for all DeckGL features! Just use
+Pydeck instead of
+st.deck_gl_chart.
+To do that, simply pass a PyDeck object to
+st.pydeck_chart,
+st.write,
+or magic.Note that as a preview release things may change in the near future.
+Looking forward to hearing input from the community before we stabilize the
+API!The goals is for this to replace st.deck_gl_chart, since it
+is does everything the old API did and much more!🆕 Better handling of Streamlit upgrades while developing. We now auto-reload
+the browser tab if the app it is displaying uses a newer version of Streamlit
+than the one the tab is running.👑 New favicon, with our new logo!Notable fixes:Magic now works correctly in Python 3.8. It no longer causes
+docstrings to render in your app.Breaking changes:Updated how we calculate the default width and height of all chart types.
+We now leave chart sizing up to your charting library itself, so please refer
+to the library's documentation.As a result, the width and height arguments have been deprecated
+from most chart commands, and use_container_width has been introduced
+everywhere to allow you to make charts fill as much horizontal space as
+possible (this used to be the default).Version 0.52.0Release date: December 20, 2019Highlights:📤 Preview release of the file uploader widget. To try it out just call
+st.file_uploader!Note that as a preview release things may change in the near future.
+Looking forward to hearing input from the community before we stabilize the
+API!👋 Support for emoji codes in
+st.write and st.markdown! Try it out with st.write("Hello :wave:").Breaking changes:🧹 st.pyplot now clears figures by default, since that's what you want 99% of
+the time. This allows you to create two or more Matplotlib charts without
+having to call
+pyplot.clf
+every time. If you want to turn this behavior off, use
+st.pyplot(clear_figure=False)📣 st.cache no longer checks for input mutations. This is the first change
+of our ongoing effort to simplify the caching system and prepare Streamlit
+for the launch of other caching primitives like Session State!Version 0.51.0Release date: November 30, 2019Highlights:🐕 You can now tweak the behavior of the file watcher with the config option server.fileWatcherType. Use it to switch between:auto (default) : Streamlit will attempt to use the watchdog module, and
+falls back to polling if watchdog is not available.watchdog : Force Streamlit to use the watchdog module.poll : Force Streamlit to always use polling.none : Streamlit will not watch files.Notable bug fixes:Fix the "keyPrefix" option in static report sharing #724Add support for getColorX and getTargetColorX to DeckGL Chart #718Fixing Tornado on Windows + Python 3.8 #682Fall back on webbrowser if xdg-open is not installed on Linux #701Fixing number input spin buttons for Firefox #683Fixing CTRL+ENTER on Windows #699Do not automatically create credential file when in headless mode #467Version 0.50.1Release date: November 10, 2019Highlights:👩‍🎓 SymPy support and ability to draw mathematical expressions using LaTeX! See
+st.latex,
+st.markdown,
+and
+st.write.🌄 You can now set config options using environment variables. For example,
+export STREAMLIT_SERVER_PORT=9876.🐱 Ability to call streamlit run directly with Github and Gist URLs. No
+need to grab the "raw" URL first!📃 Cleaner exception stack traces. We now remove all Streamlit-specific code
+from stack traces originating from the user's app.Version 0.49.0Release date: October 23, 2019Highlights:💯 New input widget for entering numbers with the keyboard: st.number_input()📺 Audio/video improvements: ability to load from a URL, to embed YouTube
+videos, and to set the start position.🤝 You can now (once again) share static snapshots of your apps to S3! See
+the S3 section of streamlit config show to set it up. Then share from
+top-right menu.⚙️ Use server.baseUrlPath config option to set Streamlit's URL to something
+like http://domain.com/customPath.Notable bug fixes:Fixes numerous Windows bugs, including Issues
+#339 and
+#401.Version 0.48.0Release date: October 12, 2019Highlights:🔧 Ability to set config options as command line flags or in a local config file.↕️ You can now maximize charts and images!⚡ Streamlit is now much faster when writing data in quick succession to your app.✳️ Ability to blacklist folder globs from "run on save" and @st.cache hashing.🎛️ Improved handling of widget state when Python file is modified.🙈 Improved HTML support in st.write and st.markdown. HTML is still unsafe, though!Notable bug fixes:Fixes @st.cache bug related to having your Python environment on current
+working directory. Issue #242Fixes loading of root url / on Windows. Issue #244Version 0.47.0Release date: October 1, 2019Highlights:🌄 New hello.py showing off 4 glorious Streamlit apps. Try it out!🔄 Streamlit now automatically selects an unused port when 8501 is already in use.🎁 Sidebar support is now out of beta! Just start any command with st.sidebar. instead of st.⚡ Performance improvements: we added a cache to our websocket layer so we no longer re-send data to the browser when it hasn't changed between runs📈 Our "native" charts st.line_chart, st.area_chart and st.bar_chart now use Altair behind the scenes🔫 Improved widgets: custom st.slider labels; default values in multiselect🕵️‍♀️ The filesystem watcher now ignores hidden folders and virtual environments💅 Plus lots of polish around caching and widget state managementBreaking change:🛡️ We have temporarily disabled support for sharing static "snapshots" of Streamlit apps. Now that we're no longer in a limited-access beta, we need to make sure sharing is well thought through and abides by laws like the DMCA. But we're working on a solution!Version 0.46.0Release date: September 19, 2019Highlights:✨ Magic commands! Use st.write without typing st.write. See
+https://docs.streamlit.io/en/latest/api.html#magic-commands🎛️ New st.multiselect widget.🐍 Fixed numerous install issues so now you can use pip install streamlit
+even in Conda! We've therefore deactivated our Conda repo.🐞 Multiple bug fixes and additional polish in preparation for our launch!Breaking change:🛡️ HTML tags are now blacklisted in st.write/st.markdown by default. More
+information and a temporary work-around at:
+https://github.com/streamlit/streamlit/issues/152Version 0.45.0Release date: August 28, 2019Highlights:😱 Experimental support for sidebar! Let us know if you want to be a beta
+tester.🎁 Completely redesigned st.cache! Much more performant, has a cleaner API,
+support for caching functions called by @st.cached functions,
+user-friendly error messages, and much more!🖼️ Lightning fast st.image, ability to choose between JPEG and PNG
+compression, and between RGB and BGR (for OpenCV).💡 Smarter API for st.slider, st.selectbox, and st.radio.🤖 Automatically fixes the Matplotlib backend -- no need to edit .matplotlibrcVersion 0.44.0Release date: July 28, 2019Highlights:⚡ Lightning-fast reconnect when you do a ctrl-c/rerun on your Streamlit code📣 Useful error messages when the connection fails💎 Fixed multiple bugs and improved polish of our newly-released interactive widgetsVersion 0.43.0Release date: July 9, 2019Highlights:⚡ Support for interactive widgets! 🎈🎉Version 0.42.0Release date: July 1, 2019Highlights:💾 Ability to save Vega-Lite and Altair charts to SVG or PNG🐇 We now cache JS files in your browser for faster loading⛔ Improvements to error-handling inside Streamlit appsVersion 0.41.0Release date: June 24, 2019Highlights:📈 Greatly improved our support for named datasets in Vega-Lite and Altair🙄 Added ability to ignore certain folders when watching for file changes. See the server.folderWatchBlacklist config option.☔ More robust against syntax errors on the user's script and imported modulesVersion 0.40.0Release date: June 10, 2019Highlights:Streamlit is more than 10x faster. Just save and watch your analyses update instantly.We changed how you run Streamlit apps:
+$ streamlit run your_script.py [script args]Unlike the previous versions of Streamlit, streamlit run [script] [script args] creates a server (now you don't need to worry if the proxy is up). To kill the server, all you need to do is hit Ctrl+c.Why is this so much faster?Now, Streamlit keeps a single Python session running until you kill the server. This means that Streamlit can re-run your code without kicking off a new process; imported libraries are cached to memory. An added bonus is that st.cache now caches to memory instead of to disk.What happens if I run Streamlit the old way?If you run $ python your_script.py the script will execute from top to bottom, but won't produce a Streamlit app.What are the limitations of the new architecture?To switch Streamlit apps, first you have to kill the Streamlit server with Ctrl-c. Then, you can use streamlit run to generate the next app.Streamlit only works when used inside Python files, not interactively from the Python REPL.What else do I need to know?The strings we print to the command line when liveSave is on have been cleaned up. You may need to adjust any RegEx that depends on those.A number of config options have been renamed:Old configNew configproxy.isRemoteserver.headlessproxy.liveSaveserver.liveSaveproxy.runOnSaveserver.runOnSaveproxy.watchFileSystemserver.runOnSaveproxy.enableCORSserver.enableCORSproxy.portserver.portbrowser.proxyAddressbrowser.serverAddressbrowser.proxyPortbrowser.serverPortclient.waitForProxySecsn/aclient.throttleSecsn/aclient.tryToOutliveProxyn/aclient.proxyAddressn/aclient.proxyPortn/aproxy.autoCloseDelaySecsn/aproxy.reportExpirationSecsn/aWhat if something breaks?If the new Streamlit isn't working, please let us know by Slack or email. You can downgrade at any time with these commands:pip install --upgrade streamlit==0.37
+conda install streamlit=0.37
+What's next?Thank you for staying with us on this journey! This version of Streamlit lays the foundation for interactive widgets, a new feature of Streamlit we're really excited to share with you in the next few months.Version 0.36.0Release date: May 03, 2019Highlights🚣‍♀️ st.progress() now also accepts floats from 0.0–1.0🤯 Improved rendering of long headers in DataFrames🔐 Shared apps now default to HTTPSVersion 0.35.0Release date: April 26, 2019Highlights📷 Bokeh support! Check out docs for st.bokeh_chart⚡️ Improved the size and load time of saved apps⚾️ Implemented better error-catching throughout the codebaseWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: RoadmapNext: Cheat sheetHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Main concepts - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedremoveInstallationMain conceptsCreate an appMultipage appsaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit library/Get started/Main conceptsMain conceptsWorking with Streamlit is simple. First you sprinkle a few Streamlit commands
+into a normal Python script, then you run it with streamlit run:streamlit run your_script.py [-- script args]
+As soon as you run the script as shown above, a local Streamlit server will
+spin up and your app will open in a new tab in your default web browser. The app
+is your canvas, where you'll draw charts, text, widgets, tables, and more.What gets drawn in the app is up to you. For example
+st.text writes raw text to your app, and
+st.line_chart draws — you guessed it — a
+line chart. Refer to our API documentation to see all commands that
+are available to you.push_pinNoteWhen passing your script some custom arguments, they must be passed after two dashes. Otherwise the
+arguments get interpreted as arguments to Streamlit itself.Another way of running Streamlit is to run it as a Python module. This can be
+useful when configuring an IDE like PyCharm to work with Streamlit:# Running
+python -m streamlit run your_script.py
+
+# is equivalent to:
+streamlit run your_script.py
+starTipYou can also pass a URL to streamlit run! This is great when combined with
+GitHub Gists. For example:streamlit run https://raw.githubusercontent.com/streamlit/demo-uber-nyc-pickups/master/streamlit_app.py
+Development flowEvery time you want to update your app, save the source file. When you do
+that, Streamlit detects if there is a change and asks you whether you want to
+rerun your app. Choose "Always rerun" at the top-right of your screen to
+automatically update your app every time you change its source code.This allows you to work in a fast interactive loop: you type some code, save
+it, try it out live, then type some more code, save it, try it out, and so on
+until you're happy with the results. This tight loop between coding and viewing
+results live is one of the ways Streamlit makes your life easier.starTipWhile developing a Streamlit app, it's recommended to lay out your editor and
+browser windows side by side, so the code and the app can be seen at the same
+time. Give it a try!As of Streamlit version 1.10.0 and higher, Streamlit apps cannot be run from the root directory of Linux distributions. If you try to run a Streamlit app from the root directory, Streamlit will throw a FileNotFoundError: [Errno 2] No such file or directory error. For more information, see GitHub issue #5239.If you are using Streamlit version 1.10.0 or higher, your main script should live in a directory other than the root directory. When using Docker, you can use the WORKDIR command to specify the directory where your main script lives. For an example of how to do this, read Create a Dockerfile.Data flowStreamlit's architecture allows you to write apps the same way you write plain
+Python scripts. To unlock this, Streamlit apps have a unique data flow: any
+time something must be updated on the screen, Streamlit reruns your entire
+Python script from top to bottom.This can happen in two situations:Whenever you modify your app's source code.Whenever a user interacts with widgets in the app. For example, when dragging
+a slider, entering text in an input box, or clicking a button.Whenever a callback is passed to a widget via the on_change (or on_click) parameter, the callback will always run before the rest of your script. For details on the Callbacks API, please refer to our Session State API Reference Guide.And to make all of this fast and seamless, Streamlit does some heavy lifting
+for you behind the scenes. A big player in this story is the
+@st.cache_data decorator, which allows developers to skip certain
+costly computations when their apps rerun. We'll cover caching later in this
+page.Display and style dataThere are a few ways to display data (tables, arrays, data frames) in Streamlit
+apps. Below, you will be introduced to magic
+and st.write(), which can be used to write
+anything from text to tables. After that, let's take a look at methods designed
+specifically for visualizing data.Use magicYou can also write to your app without calling any Streamlit methods.
+Streamlit supports "magic commands," which means you don't have to use
+st.write() at all! To see this in action try this snippet:"""
+# My first app
+Here's our first attempt at using data to create a table:
+"""
+
+import streamlit as st
+import pandas as pd
+df = pd.DataFrame({
+  'first column': [1, 2, 3, 4],
+  'second column': [10, 20, 30, 40]
+})
+
+df
+Any time that Streamlit sees a variable or a literal
+value on its own line, it automatically writes that to your app using
+st.write(). For more information, refer to the
+documentation on magic commands.Write a data frameAlong with magic commands,
+st.write() is Streamlit's "Swiss Army knife". You
+can pass almost anything to st.write():
+text, data, Matplotlib figures, Altair charts, and more. Don't worry, Streamlit
+will figure it out and render things the right way.import streamlit as st
+import pandas as pd
+
+st.write("Here's our first attempt at using data to create a table:")
+st.write(pd.DataFrame({
+    'first column': [1, 2, 3, 4],
+    'second column': [10, 20, 30, 40]
+}))
+There are other data specific functions like
+st.dataframe() and
+st.table() that you can also use for displaying
+data. Let's understand when to use these features and how to add colors and styling to your data frames.You might be asking yourself, "why wouldn't I always use st.write()?" There are
+a few reasons:Magic and st.write() inspect the type of
+data that you've passed in, and then decide how to best render it in the
+app. Sometimes you want to draw it another way. For example, instead of
+drawing a dataframe as an interactive table, you may want to draw it as a
+static table by using st.table(df).The second reason is that other methods return an object that can be used
+and modified, either by adding data to it or replacing it.Finally, if you use a more specific Streamlit method you can pass additional
+arguments to customize its behavior.For example, let's create a data frame and change its formatting with a Pandas
+Styler object. In this example, you'll use Numpy to generate a random sample,
+and the st.dataframe() method to draw an
+interactive table.push_pinNoteThis example uses Numpy to generate a random sample, but you can use Pandas
+DataFrames, Numpy arrays, or plain Python arrays.import streamlit as st
+import numpy as np
+
+dataframe = np.random.randn(10, 20)
+st.dataframe(dataframe)
+Let's expand on the first example using the Pandas Styler object to highlight
+some elements in the interactive table.import streamlit as st
+import numpy as np
+import pandas as pd
+
+dataframe = pd.DataFrame(
+    np.random.randn(10, 20),
+    columns=('col %d' % i for i in range(20)))
+
+st.dataframe(dataframe.style.highlight_max(axis=0))
+Streamlit also has a method for static table generation:
+st.table().import streamlit as st
+import numpy as np
+import pandas as pd
+
+dataframe = pd.DataFrame(
+    np.random.randn(10, 20),
+    columns=('col %d' % i for i in range(20)))
+st.table(dataframe)
+Draw charts and mapsStreamlit supports several popular data charting libraries like Matplotlib,
+Altair, deck.gl, and more. In this section, you'll
+add a bar chart, line chart, and a map to your app.Draw a line chartYou can easily add a line chart to your app with
+st.line_chart(). We'll generate a random
+sample using Numpy and then chart it.import streamlit as st
+import numpy as np
+import pandas as pd
+
+chart_data = pd.DataFrame(
+     np.random.randn(20, 3),
+     columns=['a', 'b', 'c'])
+
+st.line_chart(chart_data)
+Plot a mapWith st.map() you can display data points on a map.
+Let's use Numpy to generate some sample data and plot it on a map of
+San Francisco.import streamlit as st
+import numpy as np
+import pandas as pd
+
+map_data = pd.DataFrame(
+    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
+    columns=['lat', 'lon'])
+
+st.map(map_data)
+WidgetsWhen you've got the data or model into the state that you want to explore, you
+can add in widgets like st.slider(),
+st.button() or
+st.selectbox(). It's really straightforward
+— treat widgets as variables:import streamlit as st
+x = st.slider('x')  # 👈 this is a widget
+st.write(x, 'squared is', x * x)
+On first run, the app above should output the text "0 squared is 0". Then
+every time a user interacts with a widget, Streamlit simply reruns your script
+from top to bottom, assigning the current state of the widget to your variable
+in the process.For example, if the user moves the slider to position 10, Streamlit will
+rerun the code above and set x to 10 accordingly. So now you should see the
+text "10 squared is 100".Widgets can also be accessed by key, if you choose to specify a string to use as the unique key for the widget:import streamlit as st
+st.text_input("Your name", key="name")
+
+# You can access the value at any point with:
+st.session_state.name
+Every widget with a key is automatically added to Session State. For more information about Session State, its association with widget state, and its limitations, see Session State API Reference Guide.Use checkboxes to show/hide dataOne use case for checkboxes is to hide or show a specific chart or section in
+an app. st.checkbox() takes a single argument,
+which is the widget label. In this sample, the checkbox is used to toggle a
+conditional statement.import streamlit as st
+import numpy as np
+import pandas as pd
+
+if st.checkbox('Show dataframe'):
+    chart_data = pd.DataFrame(
+       np.random.randn(20, 3),
+       columns=['a', 'b', 'c'])
+
+    chart_data
+Use a selectbox for optionsUse st.selectbox to choose from a series. You
+can write in the options you want, or pass through an array or data frame
+column.Let's use the df data frame we created earlier.import streamlit as st
+import pandas as pd
+
+df = pd.DataFrame({
+    'first column': [1, 2, 3, 4],
+    'second column': [10, 20, 30, 40]
+    })
+
+option = st.selectbox(
+    'Which number do you like best?',
+     df['first column'])
+
+'You selected: ', option
+LayoutStreamlit makes it easy to organize your widgets in a left panel sidebar with
+st.sidebar. Each element that's passed to
+st.sidebar is pinned to the left, allowing
+users to focus on the content in your app while still having access to UI
+controls.For example, if you want to add a selectbox and a slider to a sidebar,
+use st.sidebar.slider and st.sidebar.selectbox instead of st.slider and
+st.selectbox:import streamlit as st
+
+# Add a selectbox to the sidebar:
+add_selectbox = st.sidebar.selectbox(
+    'How would you like to be contacted?',
+    ('Email', 'Home phone', 'Mobile phone')
+)
+
+# Add a slider to the sidebar:
+add_slider = st.sidebar.slider(
+    'Select a range of values',
+    0.0, 100.0, (25.0, 75.0)
+)
+Beyond the sidebar, Streamlit offers several other ways to control the layout
+of your app. st.columns lets you place widgets side-by-side, and
+st.expander lets you conserve space by hiding away large content.import streamlit as st
+
+left_column, right_column = st.columns(2)
+# You can use a column just like st.sidebar:
+left_column.button('Press me!')
+
+# Or even better, call Streamlit functions inside a "with" block:
+with right_column:
+    chosen = st.radio(
+        'Sorting hat',
+        ("Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"))
+    st.write(f"You are in {chosen} house!")
+push_pinNotest.echo and st.spinner are not currently supported inside the sidebar
+or layout options. Rest assured, though, we're currently working on adding support for those too!Show progressWhen adding long running computations to an app, you can use
+st.progress() to display status in real time.First, let's import time. We're going to use the time.sleep() method to
+simulate a long running computation:import time
+Now, let's create a progress bar:import streamlit as st
+import time
+
+'Starting a long computation...'
+
+# Add a placeholder
+latest_iteration = st.empty()
+bar = st.progress(0)
+
+for i in range(100):
+  # Update the progress bar with each iteration.
+  latest_iteration.text(f'Iteration {i+1}')
+  bar.progress(i + 1)
+  time.sleep(0.1)
+
+'...and now we\'re done!'
+ThemesStreamlit supports Light and Dark themes out of the box. Streamlit will first
+check if the user viewing an app has a Light or Dark mode preference set by
+their operating system and browser. If so, then that preference will be used.
+Otherwise, the Light theme is applied by default.You can also change the active theme from "☰" → "Settings".Want to add your own theme to an app? The "Settings" menu has a theme editor
+accessible by clicking on "Edit active theme". You can use this editor to try
+out different colors and see your app update live.When you're happy with your work, themes can be saved by
+setting config options
+in the [theme] config section. After you've defined a theme for your app, it
+will appear as "Custom Theme" in the theme selector and will be applied by
+default instead of the included Light and Dark themes.More information about the options available when defining a theme can be found
+in the theme option documentation.push_pinNoteThe theme editor menu is available only in local development. If you've deployed your app using
+Streamlit Community Cloud, the "Edit active theme" button will no longer be displayed in the "Settings"
+menu.starTipAnother way to experiment with different theme colors is to turn on the "Run on save" option, edit
+your config.toml file, and watch as your app reruns with the new theme colors applied.CachingThe Streamlit cache allows your app to stay performant even when loading data from the web, manipulating large datasets, or performing expensive computations.The basic idea behind caching is to store the results of expensive function calls and return the cached result when the same inputs occur again rather than calling the function on subsequent runs.To cache a function in Streamlit, you need to decorate it with one of two decorators (st.cache_data and st.cache_resource):@st.cache_data
+def long_running_function(param1, param2):
+    return …
+In this example, decorating long_running_function with @st.cache_data tells Streamlit that whenever the function is called, it checks two things:The values of the input parameters (in this case, param1 and param2).The code inside the function.If this is the first time Streamlit sees these parameter values and function code, it runs the function and stores the return value in a cache. The next time the function is called with the same parameters and code (e.g., when a user interacts with the app), Streamlit will skip executing the function altogether and return the cached value instead. During development, the cache updates automatically as the function code changes, ensuring that the latest changes are reflected in the cache.As mentioned, there are two caching decorators:st.cache_data is the recommended way to cache computations that return data: loading a DataFrame from CSV, transforming a NumPy array, querying an API, or any other function that returns a serializable data object (str, int, float, DataFrame, array, list, …). It creates a new copy of the data at each function call, making it safe against mutations and race conditions. The behavior of st.cache_data is what you want in most cases – so if you're unsure, start with st.cache_data and see if it works!st.cache_resource is the recommended way to cache global resources like ML models or database connections – unserializable objects that you don’t want to load multiple times. Using it, you can share these resources across all reruns and sessions of an app without copying or duplication. Note that any mutations to the cached return value directly mutate the object in the cache (more details below).Streamlit's two caching decorators and their use cases.For more information about the Streamlit caching decorators, their configuration parameters, and their limitations, see Caching.PagesAs apps grow large, it becomes useful to organize them into multiple pages. This makes the app easier to manage as a developer and easier to navigate as a user. Streamlit provides a frictionless way to create multipage apps.We designed this feature so that building a multipage app is as easy as building a single-page app! Just add more pages to an existing app as follows:In the folder containing your main script, create a new pages folder. Let’s say your main script is named main_page.py.Add new .py files in the pages folder to add more pages to your app.Run streamlit run main_page.py as usual.That’s it! The main_page.py script will now correspond to the main page of your app. And you’ll see the other scripts from the pages folder in the sidebar page selector. For example:main_page.pyimport streamlit as st
+
+st.markdown("# Main page 🎈")
+st.sidebar.markdown("# Main page 🎈")
+pages/page_2.pyimport streamlit as st
+
+st.markdown("# Page 2 ❄️")
+st.sidebar.markdown("# Page 2 ❄️")
+pages/page_3.pyimport streamlit as st
+
+st.markdown("# Page 3 🎉")
+st.sidebar.markdown("# Page 3 🎉")
+Now run streamlit run main_page.py and view your shiny new multipage app!Our documentation on Multipage apps teaches you how to add pages to your app, including how to define pages, structure and run multipage apps, and navigate between pages. Once you understand the basics, create your first multipage app!App modelNow that you know a little more about all the individual pieces, let's close
+the loop and review how it works together:Streamlit apps are Python scripts that run from top to bottomEvery time a user opens a browser tab pointing to your app, the script is
+re-executedAs the script executes, Streamlit draws its output live in a browserScripts use the Streamlit cache to avoid recomputing expensive functions, so
+updates happen very fastEvery time a user interacts with a widget, your script is re-executed and
+the output value of that widget is set to the new value during that run.Streamlit apps can contain multiple pages, which are defined in separate
+.py files in a pages folder.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: InstallationNext: Create an appHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Troubleshooting - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Streamlit Community Cloud/TroubleshootingTroubleshootingSorry to hear you're having issues! Please take a look at some frequently asked questions and issues below. If you cannot find an answer to your issue, please post on our Community forum so that our engineers or community members can help you.Table of contentsGeneral helpDeploying appsSharing and accessing appsData and app securityGitHub integrationLimitations and known issuesGeneral helpHow can I get help with my app?If you have any questions, feedback, run into any issues, or need to reach us, you can ask on our Community forum. This is best suited for any questions related to the open source library and Community Cloud - debugging code, deployment, resource limits, etc.Deploying appsMy repo isn't showing on the Deploy pageIt's possible it just isn't showing up even though it is already there. Try typing it in. If we don't recognize it, you'll see the message below with a link to click and give access.If for some reason that doesn't work, please try logging out and back in again to make sure the change took effect. And if that doesn't work - please let us know and we'll get you sorted!It won't let me deploy the appTo deploy an app for the first time you must have admin-level access to the repo in GitHub. Please check with your administrator to make sure you have that access. If not, please ask them to deploy for the first time (we need this in order to establish webhooks for continuous integration) and from there you can then push updates to the app.I need to set a specific Python version for my appWhen deploying an app, under advanced settings, you can choose which version of Python you wish your app to use.How do I store files locally?If you want to store your data locally as opposed to in a database, you can store the file in your GitHub repository. Streamlit is just python, so you can read the file using:pandas.read_csv("data.csv") or open("data.csv")starTipIf you have really big or binary data that you change frequently, and git is feeling slow, you might want to check out Git Large File Store (LFS) as a better way to store large files in GitHub. You don't need to make any changes to your app to start using it. If your GitHub repo uses LFS, it will now just work with Streamlit.My app is running into issues while deployingCheck your Cloud logs by clicking on the "Manage app" expander in the bottom right corner of your screen. Often the trouble is due to a dependency not being declared. See here for more information on dependency management.If that's not the issue, then please send the logs and warning you are seeing to our Community forum and we'll help get you sorted!My app is hitting resource limits / my app is running very slowlyIf your app is running slowly or you're hitting the 'Argh' page, we first highly recommend going through and implementing the suggestions in the following blog posts to prevent your app from hitting the resource limits and to detect if your Streamlit app leaks memory:Common app problems: Resource limits3 steps to fix app memory leaksIf you're still having issues, click here to learn more about resource limits.Can I get a custom URL for my app?Yes! You can find instructions for setting a custom subdomain here.Sharing and accessing appsI don't have SSO. How do I sign in to Streamlit?Don't have SSO? No problem! You can sign in to Streamlit with your email address. Click here for step-by-step instructions on how to sign in with email.How do I add viewers to my Streamlit apps?Viewer auth allows you to restrict the viewers of your private app. To access your app, users have to authenticate using an email-based passwordless login or Google OAuth. To learn more about how to share your public and private apps with viewers, click here.Do viewers need access to the GitHub repo?Nope! You only need access to the GitHub repo if you want to push changes to the app.What will unauthorized/logged out viewers see when they view my app?A 404 error is displayed to unauthorized viewers to avoid providing any unnecessary information about your app to unintended viewers. Users who satisfy any of the following conditions will see a 404 error when attempting to view your app after you have configured viewer auth:User is not logged in with Google SSO.User is not included in the list of viewers provided in the app settings.User lacks read access to your app's GitHub repo.User has read access to your app's GitHub repo but is not enrolled in Community Cloud.I've added someone to the viewer list but they still see a 404 error when attempting to view the appIf a user is still seeing a 404 error after their email address has been added to the viewer list, we recommend that you:Check that the user did not log into a different Google account via Single Sign-On (if you have added their work email address to the viewer list, ask the user to check that they are not logged into their personal Google account, and vice versa).Check that the user has navigated to the correct URL.Check that the user's email address has been entered correctly in the viewer list.Reach out on our Community forum and we will be happy to help.Data and app securityHow will Streamlit secure my data?Streamlit takes a number of industry best-practice measures to ensure your code, data, and apps are all secure. Read more in our Trust and Security memo.How do I set up SSO for my organization?Community Cloud uses Google OAuth, by default. If you use Google for authentication you're all set.Billing and administrationThe Community Cloud is a free service. You don't have to worry about setting up billing or being charged.GitHub integrationWhy does Streamlit require additional OAuth scope?In order to deploy your app, Streamlit requires access to your app's source code in GitHub and also the ability to manage the public keys associated with the repositories. The default GitHub OAuth scopes are sufficient to work with apps in public GitHub repositories. However, in order to work with apps in private GitHub repositories, Streamlit requires the additional repo OAuth scope from GitHub. We recognize that this scope provides Streamlit with extra permissions that we do not really need, and which, as people who prize security, we'd rather not even be granted. Alas, we need to work with the APIs we are provided by GitHub.After deploying my private-repo app, I received an email from GitHub saying a new public key was added to my repo. Is this expected?This is the expected behavior. When you try to deploy an app that lives in a private repo, Streamlit Community Cloud needs to get access to that repo somehow. For this, we create a read-only GitHub Deploy Key then access your repo using a public SSH key. When we set this up, GitHub notifies admins of the repo that the key was created as a security measure.What happens when a user's permissions change on GitHub?Once a user is added to a repository on GitHub, it will take at most 15 minutes before they can deploy the app on Cloud. If a user is removed from a repository on GitHub, it will take at most 15 minutes before their permissions to manage the app from that repository are revoked.Limitations and known issuesHere are some limitations and known issues that we're actively working to resolve. If you find an issue please let us know!When you print something to the Cloud logs, you may need to do a sys.stdout.flush() before it shows up.Apps execute in a Linux environment running Debian Buster (slim) with Python 3.7. There is no way to change these, and we may upgrade the environment at any point. If we do upgrade it, we will usually not touch existing apps, so they'll continue to work as expected. But if there's a critical fix in the update, we may force-upgrade all apps.Matplotlib doesn't work well with threads. So if you're using Matplotlib you should wrap your code with locks as shown in the snippet below. This Matplotlib bug is more prominent when you share your app apps since you're more likely to get more concurrent users then.from matplotlib.backends.backend_agg import RendererAgg
+_lock = RendererAgg.lock
+
+with _lock:
+  fig.title('This is a figure)')
+  fig.plot([1,20,3,40])
+  st.pyplot(fig)
+All apps are hosted in the United States. This is currently not configurable.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Release notesNext: Knowledge baseHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Tutorials - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsremoveConnect to data sourcesaddDeploy Streamlit appsaddSession State basicsUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge base/TutorialsTutorialsOur tutorials include step-by-step examples of building different types of apps in Streamlit.Connect to data sourcesSession State basicsDeploy Streamlit appsWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Knowledge baseNext: Connect to data sourcesHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Streamlit documentationDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesStreamlit documentationStreamlit is an open-source Python library that makes it easy to create and share beautiful, custom web apps for machine learning and data science. In just a few minutes you can build and deploy powerful data apps. So let's get started!arrow_forwardGet startedIf you're new to Streamlit and don't know where to start, this is a good place.dvrAPI referenceLearn about our APIs, with actionable explanations of specific functions and features.grid_viewApp galleryTry out awesome apps created by our users, and curated from our forums or Twitter.How to use our docsdescriptionStreamlit library includes our Get started guide, API reference, and more advanced features of the core library including caching, theming, and Streamlit Components.cloudStreamlit Community Cloud is an open and free platform for the community to deploy, discover, and share Streamlit apps and code with each other. Create a new app, share it with the community, get feedback, iterate quickly with live code updates, and have an impact!schoolKnowledge base is a self-serve library of tips, step-by-step tutorials, and articles that answer your questions about creating and deploying Streamlit apps.What's newelectrical_servicesst.experimental_connectionIntroducing st.experimental_connection to let you easily connect your app to data sources and APIs.helpSupercharged st.help!st.help has been revamped to show more information about object methods, attributes, classes, and more, which is great for debugging!tips_and_updatesTooltips on text elementsMost text elements can optionally include tooltips with thehelp parameter.terminalLine numbers in st.codest.code supports optionally displaying line numbers to the code block's left with the boolean line_numbers parameter.lockGlobal secrets.toml fileStreamlit now supports the use of a global secrets.tomlfile, in addition to a project-level file, to easily store and securely access your secrets. Click to read the docs.edit_noteEditable dataframes!Display a data editor widget with st.experimental_data_editorto edit dataframes and many other data structures in a table-like UI.Latest blog postsApril 27, 2023The ultimate athlete management dashboard for biomechanicsLearn how to measure jump impulse, max force, and asymmetry with Python and StreamlitNext: Read MoreApril 20, 2023Create an animated data story with ipyvizzu and StreamlitA tutorial on using ipyvizzu and ipyvizzu-storyNext: Read MoreApril 13, 2023Introducing a chemical molecule component for your Streamlit appsIntegrate a fully featured molecule editor with just a few lines of code!Next: Read MoreView all updatesJoin the communityStreamlit is more than just a way to make data apps, it's also a community of creators that share their apps and ideas and help each other make their work better. Please come join us on the community forum. We love to hear your questions, ideas, and help you work through your bugs — stop by today!View forumOther MediaGitHubView the Streamlit source code and issue tracker.TwitterFollow @streamlit on Twitter to keep up with the latest news.YouTubeWatch screencasts made by the Streamlit team and the community.DiscordJoin thousands of other Streamlit enthusiasts in our Discord server.InstagramFollow @streamlit.io on Instagram for more updates and content.Next: Get startedHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Knowledge Base - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge baseKnowledge baseThe knowledge base is a self-serve library of tips, step-by-step tutorials, and articles that answer your questions about creating and deploying Streamlit apps.local_libraryTutorials. Our tutorials include step-by-step examples of building different types of apps in Streamlit.auto_awesomeUsing Streamlit. Here are some frequently asked questions about using Streamlit.buildStreamlit Components. Here are some questions we've received about Streamlit Components.downloadingInstalling dependencies. If you run into problems installing depedencies for your Streamlit apps, we've got you covered.reportDeployment issues. Have questions about deploying Streamlit apps to the cloud? This section covers deployment-related issues.Was this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit Community CloudNext: TutorialsHomeContact UsCommunityCopyright © 2023, Streamlit Inc.Installing dependencies - Streamlit DocsDocumentationsearchSearchdescriptionStreamlit libraryGet startedaddAPI referenceaddAdvanced featuresaddComponentsaddRoadmapopen_in_newChangelogCheat sheetcloudStreamlit Community CloudGet startedaddTrust and SecurityRelease notesopen_in_newTroubleshootingschoolKnowledge baseTutorialsaddUsing StreamlitStreamlit ComponentsInstalling dependenciesDeployment issuesHome/Knowledge base/Installing dependenciesInstalling dependenciesModuleNotFoundError: No module namedImportError: libGL.so.1: cannot open shared object file: No such file or directoryERROR: No matching distribution found forHow to install a package not on PyPI/Conda but available on GitHubInstall the Snowflake Connector for Python on Streamlit Community CloudWas this page helpful?thumb_upYes thumb_downNoeditSuggest editsforumStill have questions?Our forums are full of helpful information and Streamlit experts.Previous: Streamlit ComponentsNext: How to install a package not on PyPI or Conda but available on GitHubHomeContact UsCommunityCopyright © 2023, Streamlit Inc.
